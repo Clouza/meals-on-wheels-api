@@ -1,5 +1,5 @@
 # Overview
-Meals on Wheels is a non-commercial project related to food
+Meals on Wheels is a non-commercial project related to food and services
 
 ## API
 | Endpoint      | Description | Status |
