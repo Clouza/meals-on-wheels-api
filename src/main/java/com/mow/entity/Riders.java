@@ -14,33 +14,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "meals")
-public class Meals {
-	
+@Table(name = "riders")
+public class Riders {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "meal_id")
-	Long mealId;
+	@Column(name = "rider_id")
+	Long riderId;
 	
-	@Column(name = "name", nullable = false)
-	String name;
+	@Column(name = "vehicle", nullable = false)
+	String vehicle;
 	
-	@Column(name = "description", nullable = false)
-	String description;
+	@Column(name = "driving_license", nullable = false)
+	String drivingLicense;
 	
 	@Column(name = "rating", nullable = false)
-	float rating;
+	double rating;
 	
-	@Column(name = "stock", nullable = false)
-	int stock;
-	
-	@Column(name = "approve", nullable = false)
-	Boolean approve;
-	
-	@Column(name = "picture", nullable = false)
-	String picture;
-	
-	@Column(name = "type", nullable = false)
-	String type;
+	@Column(name = "approved", nullable = false)
+	boolean approved;
 	
 }

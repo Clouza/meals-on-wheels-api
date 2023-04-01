@@ -5,5 +5,5 @@ public enum Roles {
 	MEMBER,
 	PARTNER,
 	RIDER,
-	SUPPORTER
+	DONATOR
 }

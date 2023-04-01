@@ -69,9 +69,9 @@ class MealsOnWheelsApiApplicationTests {
 	}
 	
 	@Test
-	@WithMockUser(username = "user", password = "user", roles = {"SUPPORTER"})
-	void supporterEnpoint() throws Exception {
-		mvc.perform(get("/api/v1/supporter/")).andExpect(status().isOk());
+	@WithMockUser(username = "user", password = "user", roles = {"DONATOR"})
+	void donatorEnpoint() throws Exception {
+		mvc.perform(get("/api/v1/c/")).andExpect(status().isOk());
 	}
 	
 

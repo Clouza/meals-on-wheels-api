@@ -1,9 +1,5 @@
 package com.mow.entity;
 
-import java.sql.Date;
-
-import com.mow.enums.Roles;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
