@@ -34,4 +34,7 @@ public class Donators {
 	@Column(name = "totalDonate", nullable = false)
 	double totalDonate;
 	
+	@Column(name = "created_at", nullable = false)
+	String createdAt;
+	
 }

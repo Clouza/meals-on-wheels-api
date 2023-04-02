@@ -22,4 +22,10 @@ public class OrderHistories {
 	@Column(name = "order_history_id")
 	Long orderHistoryId;
 	
+	@Column(name = "status", nullable = false)
+	String status;
+	
+	@Column(name = "created_at", nullable = false)
+	String createdAt;
+		
 }

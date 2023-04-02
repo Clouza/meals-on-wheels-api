@@ -44,4 +44,16 @@ public class Users {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	UserDetails userDetails;
 	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	Admins admins;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	Members members;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	Partners partners;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	Riders riders;
+	
 }

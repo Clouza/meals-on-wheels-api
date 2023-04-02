@@ -43,4 +43,10 @@ public class Meals {
 	@Column(name = "type", nullable = false)
 	String type;
 	
+	@Column(name = "created_at", nullable = false)
+	String createdAt;
+	
+	@Column(name = "updated_at", nullable = true)
+	String updatedAt;
+	
 }

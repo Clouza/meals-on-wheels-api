@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +29,12 @@ public class Partners {
 	
 	@Column(name = "approved", nullable = false)
 	boolean approved;
+	
+	@Column(name = "created_at", nullable = false)
+	String createdAt;
+
+	@OneToOne
+	@JoinColumn(name = "user_id")
+	Users user;
 	
 }

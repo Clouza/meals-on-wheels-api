@@ -25,4 +25,10 @@ public class Categories {
 	@Column(name = "name", nullable = false)
 	String name;
 	
+	@Column(name = "created_at", nullable = false)
+	String createdAt;
+	
+	@Column(name = "updated_at", nullable = true)
+	String updatedAt;
+	
 }

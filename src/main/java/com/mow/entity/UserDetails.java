@@ -42,6 +42,9 @@ public class UserDetails {
 	@Column(name = "created_at", nullable = false)
 	String createdAt;
 	
+	@Column(name = "updated_at", nullable = true)
+	String updatedAt;
+	
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;
