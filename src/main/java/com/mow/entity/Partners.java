@@ -24,9 +24,6 @@ public class Partners {
 	@Column(name = "partner_id")
 	Long partnerId;
 	
-	@Column(name = "name", nullable = false)
-	String name;
-	
 	@Column(name = "approved", nullable = false)
 	boolean approved;
 	
