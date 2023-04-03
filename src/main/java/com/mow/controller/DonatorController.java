@@ -10,7 +10,7 @@ public class DonatorController {
 
 	@GetMapping("/")
 	public String index() {
-		return "supporter endpoint";
+		return "donator endpoint";
 	}
 	
 }
