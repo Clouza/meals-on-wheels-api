@@ -47,10 +47,5 @@ public class MemberController {
 		return new ResponseEntity<>(JSON.stringify("Request has been saved"), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/approve")
-	public ResponseEntity<?> putApprove(@RequestBody Members member) {
-		membersService.approve(member.getMemberId());
-		return new ResponseEntity<>(JSON.stringify("Request has been approved"), HttpStatus.ACCEPTED);
-	}
 	
 }

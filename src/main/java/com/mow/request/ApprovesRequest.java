@@ -1,0 +1,14 @@
+package com.mow.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ApprovesRequest {
+	Long id;
+	String type;
+}
+

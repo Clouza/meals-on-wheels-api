@@ -23,9 +23,5 @@ public class MembersService {
 		membersRepository.save(member);
 	}
 	
-	public void approve(Long id) {
-		Members member = membersRepository.findById(id).get();
-		member.setApproved(true);
-		this.save(member);
-	}
+	
 }

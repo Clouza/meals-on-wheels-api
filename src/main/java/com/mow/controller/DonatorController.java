@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/supporter")
-public class SupporterController {
+public class DonatorController {
 
 	@GetMapping("/")
 	public String index() {
