@@ -2,6 +2,7 @@ package com.mow.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class MembersService {
 		member.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		membersRepository.save(member);
 	}
-	
+
+	public List<Members> getRecords() {
+		return membersRepository.findAll();
+	}
 	
 }

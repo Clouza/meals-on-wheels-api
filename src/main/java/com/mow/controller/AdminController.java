@@ -16,8 +16,10 @@ import com.mow.service.AdminsService;
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminController {
+	
 	@Autowired
 	AdminsService adminService;
+	
 	@Autowired
 	JSONResponse JSON;
 	
@@ -25,6 +27,7 @@ public class AdminController {
 	public String index() {
 		return "admin endpoint";
 	}
+	
 	@PutMapping("/approve")
 	public ResponseEntity<?> putApprove(@RequestBody ApprovesRequest approveRequest) {
 		adminService.approve(approveRequest.getId(),approveRequest.getType());

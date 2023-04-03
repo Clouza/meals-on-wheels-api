@@ -1,11 +1,12 @@
 package com.mow.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,11 @@ public class MemberController {
 		return "member endpoint";
 	}
 	
+	@GetMapping("/members")
+	public List<Members> getMembers() {
+		return membersService.getRecords();
+	}
+	
 	@PostMapping("/request")
 	public ResponseEntity<?> postRequest(@RequestBody MembersRequest membersRequest) {
 		Users user = usersService.findByUsername(membersRequest.getUsername());
@@ -46,6 +52,5 @@ public class MemberController {
 		membersService.save(member);
 		return new ResponseEntity<>(JSON.stringify("Request has been saved"), HttpStatus.CREATED);
 	}
-	
 	
 }
