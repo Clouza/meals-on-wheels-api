@@ -2,6 +2,7 @@ package com.mow.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class CategoriesService {
 	public Categories save(Categories category) {
 		category.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		return categoriesRepository.save(category);
+	}
+	
+	public List<Categories> getCategories() {
+		return categoriesRepository.findAll();
 	}
 	
 	public Categories getCategoryById(Long id) {
