@@ -367,3 +367,5 @@
 2023-04-05T11:14:27.217+08:00  INFO 3332 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2023-04-05T11:14:27.222+08:00  INFO 3332 --- [restartedMain] com.mow.MealsOnWheelsApiApplication      : Started MealsOnWheelsApiApplication in 2.26 seconds (process running for 2.557)
 2023-04-05T11:14:47.068+08:00  INFO 3332 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-04-05T11:14:47.068+08:00  INFO 3332 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-04-05T11:14:47.069+08:00  INFO 3332 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
