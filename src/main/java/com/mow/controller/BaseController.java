@@ -18,8 +18,8 @@ import com.mow.response.JSONResponse;
 import com.mow.service.UserDetailsService;
 import com.mow.service.UsersService;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class BaseController {
 
 	@Autowired
