@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class MembersRequest {
 
 	String username;
-	String evidence;
+	String message;
 
 }

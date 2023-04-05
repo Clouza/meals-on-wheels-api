@@ -30,6 +30,9 @@ public class Members {
 	@Column(name = "approved", nullable = false)
 	boolean approved;
 	
+	@Column(name = "message", nullable = false)
+	String message;
+	
 	@Column(name = "created_at", nullable = false)
 	String createdAt;
 	

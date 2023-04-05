@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mow.entity.Members;
 import com.mow.entity.Users;
+import com.mow.request.MembersRequest;
 import com.mow.response.JSONResponse;
 import com.mow.service.MembersService;
 import com.mow.service.UsersService;
@@ -55,7 +56,10 @@ public class MemberController {
 	}
 	
 	@PostMapping("/upload-evidence")
-	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) throws IOException {
+	public ResponseEntity<?> handleFileUpload(
+			@RequestParam("file") MultipartFile file, 
+			@RequestParam("username") String username,
+			@RequestParam("message") String message) throws IOException {
 		// uploading image to static directory
 		String filename = file.getOriginalFilename();
 	    String path = "target/classes/static/images/member";
@@ -79,6 +83,7 @@ public class MemberController {
 		
 		Members member = new Members();
 		member.setEvidence(filename);
+		member.setMessage(message);
 		member.setUser(user);
 		
 		membersService.save(member);
