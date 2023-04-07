@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.mow.entity.Categories;
 import com.mow.entity.Meals;
 import com.mow.repository.MealsRepository;
 import com.mow.search.MealsSpecification;
@@ -61,6 +62,19 @@ public class SearchTests {
 		List<Meals> meals = mealsRepository.findAll(mealsSpecification);
 		
 		assertTrue(meals.isEmpty());
+	}
+	
+	@Test
+	void searchEntityRelationship() {
+		// get meal
+		MealsSpecification mealsSpecification = new MealsSpecification(new SearchCriteria("name", "=", "kfc"));
+		List<Meals> meals = mealsRepository.findAll(mealsSpecification);
+		
+		// check category
+		MealsSpecification categorySpecification = new MealsSpecification(new SearchCriteria(meals.get(0).getCategory().getName(), "=", Categories.builder().name("meal")));
+		List<Meals> category = mealsRepository.findAll(mealsSpecification);
+		
+		assertFalse(category.isEmpty());
 	}
 	
 }
