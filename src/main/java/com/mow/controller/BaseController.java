@@ -59,7 +59,6 @@ public class BaseController {
 		}
 		
 		credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
-		credentials.setRole(Roles.MEMBER);
 		usersService.save(credentials);
 		
 		return ResponseEntity.ok().body(JSON.stringify("Account created"));
