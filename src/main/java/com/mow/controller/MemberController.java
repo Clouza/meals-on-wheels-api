@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mow.entity.Members;
 import com.mow.entity.Users;
-import com.mow.request.MembersRequest;
 import com.mow.response.JSONResponse;
 import com.mow.service.MembersService;
 import com.mow.service.UsersService;
@@ -56,7 +55,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/upload-evidence")
-	public ResponseEntity<?> handleFileUpload(
+	public ResponseEntity<?> register(
 			@RequestParam("file") MultipartFile file, 
 			@RequestParam("username") String username,
 			@RequestParam("message") String message) throws IOException {
