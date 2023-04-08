@@ -1,5 +1,7 @@
 package com.mow.controller;
 
+import com.mow.jwt.JWTService;
+import com.mow.request.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
@@ -27,18 +29,21 @@ public class BaseController {
 	
 	@Autowired
 	UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	JSONResponse JSON;
-	
+
+	@Autowired
+	JWTService jwtService;
+
 	@GetMapping("/")
 	public String index() {
 		return "index endpoint";
 	}
-	
+
 	@PostMapping("/registration")
 	public ResponseEntity<?> postRegistration(@RequestBody Users credentials) {
 		Users username = usersService.findByUsername(credentials.getUsername());
@@ -64,7 +69,21 @@ public class BaseController {
 		
 		return ResponseEntity.ok().body(JSON.stringify("Account created"));
 	}
-	
+
+	@PostMapping("/login")
+	public ResponseEntity<?> postLogin(@RequestBody LoginRequest credentials) {
+		Users user = usersService.findByUsername(credentials.getUsername());
+
+		if(user != null) {
+			// password match
+			if(passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
+				String token = jwtService.generateToken(user.getUsername());
+				return ResponseEntity.ok().body(JSON.stringify(token));
+			}
+		}
+
+		return ResponseEntity.ok().body(JSON.stringify("Credentials incorrect"));
+	}
 
 	// update profile
 	@PutMapping("/profile")

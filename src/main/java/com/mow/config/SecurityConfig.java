@@ -1,7 +1,11 @@
 package com.mow.config;
 
+import com.mow.exception.AuthenticationExceptionHandler;
+import com.mow.jwt.JWTFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,13 +13,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.mow.security.SecurityUserDetailsService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+	@Autowired
+	private JWTFilter JWTFilter;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,8 +37,16 @@ public class SecurityConfig {
 				.requestMatchers("/api/v1/rider/**").hasRole("RIDER")
 				.requestMatchers("/api/v1/donator/**").hasRole("DONATOR")
 			.anyRequest().permitAll();
-		
-		http.httpBasic();
+
+		// handle credentials exception
+		http.exceptionHandling().authenticationEntryPoint(this.authenticationEntryPoint());
+
+		// check valid token with JWT filter
+		http.addFilterBefore(JWTFilter, UsernamePasswordAuthenticationFilter.class);
+
+		// disable basic authentication
+		http.httpBasic().disable();
+		http.formLogin().disable();
 		
 		return http.build();
 	}
@@ -51,5 +68,10 @@ public class SecurityConfig {
         authenticationProvider.setPasswordEncoder(this.passwordEncoder());
         return authenticationProvider;
     }
-	
+
+	@Bean
+	public AuthenticationEntryPoint authenticationEntryPoint(){
+		return new AuthenticationExceptionHandler();
+	}
+
 }

@@ -3,6 +3,7 @@ package com.mow.response;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Builder;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
