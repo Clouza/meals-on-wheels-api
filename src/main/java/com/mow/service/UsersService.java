@@ -1,5 +1,6 @@
 package com.mow.service;
 
+import com.mow.enums.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +8,8 @@ import com.mow.entity.Users;
 import com.mow.repository.UsersRepository;
 
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,5 +29,7 @@ public class UsersService {
 	public Users findByEmail(String email) {
 		return usersRepository.findByEmail(email);
 	}
-	
+	public List<Users> getByRole(Roles role){
+		return usersRepository.findByRole(role);
+	}
 }

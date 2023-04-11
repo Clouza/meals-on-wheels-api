@@ -39,7 +39,7 @@ public class SecurityConfig {
 			.anyRequest().permitAll();
 
 		// handle credentials exception
-		http.exceptionHandling().authenticationEntryPoint(this.authenticationEntryPoint());
+//		http.exceptionHandling().authenticationEntryPoint(this.authenticationEntryPoint());
 
 		// check valid token with JWT filter
 		http.addFilterBefore(JWTFilter, UsernamePasswordAuthenticationFilter.class);

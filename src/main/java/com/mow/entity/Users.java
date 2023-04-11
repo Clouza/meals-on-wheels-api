@@ -1,5 +1,6 @@
 package com.mow.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mow.enums.Roles;
 
 import jakarta.persistence.CascadeType;
@@ -40,19 +41,20 @@ public class Users {
 	@Column(name = "roles", nullable = false)
 	@Enumerated(EnumType.STRING)
 	Roles role;
-	
+
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	UserDetails userDetails;
-	
+	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Admins admins;
-	
+	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Members members;
-	
+	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Partners partners;
-	
+	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Riders riders;
 	

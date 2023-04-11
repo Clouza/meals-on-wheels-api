@@ -48,6 +48,10 @@ public class PartnerController {
 	public List<Meals> getMeals() {
 		return mealsService.getMeals();
 	}
+	@GetMapping("/partners")
+	public List<Partners> getPartners() {
+		return partnerService.getPartners();
+	}
 	
 	@PostMapping("/meals")
 	public ResponseEntity<?> postMeals(@RequestBody MealsRequest mealsRequest) {
@@ -55,15 +59,6 @@ public class PartnerController {
 		return new ResponseEntity<>(JSON.stringify("Meal has been saved"), HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestParam("username") String username){
-		Users user = usersService.findByUsername(username);
-		
-		Partners partner = new Partners();
-		partner.setUser(user);
-		partnerService.save(partner);
-		
-		return ResponseEntity.ok().body(JSON.stringify("Account successfully"));
-	}
+
 	
 }
