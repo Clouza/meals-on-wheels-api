@@ -1,5 +1,6 @@
 package com.mow.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ public class UserDetails {
 	@Column(name = "user_details_id")
 	Long userDetailsId;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	String name;
 	
 	@Column(name = "phone_number", nullable = true)
@@ -44,7 +45,8 @@ public class UserDetails {
 	
 	@Column(name = "updated_at", nullable = true)
 	String updatedAt;
-	
+
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;

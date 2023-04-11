@@ -42,39 +42,5 @@ public class RiderController {
 	public String index() {
 		return "rider endpoint";
 	}
-	@PostMapping("/upload-data")
-	public ResponseEntity<?> register(
-			@RequestParam("file") MultipartFile file, 
-			@RequestParam("username") String username,
-			@RequestParam("vehicleName") String vehicleName) throws IOException {
-		// uploading image to static directory
-		String filename = file.getOriginalFilename();
-	    String path = "target/classes/static/images/rider";
-	    Path dir = Paths.get(path);
-	    
-        if(!Files.exists(dir)) {
-            Files.createDirectories(dir);
-        }
-        
-        try {
-            InputStream inputStream = file.getInputStream();
-            Path filePath = dir.resolve(filename);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ix) {
-            System.out.println(ix);
-            log.error("Image err " + ix.toString());
 
-        }
-        
-        // save User Evidence to the database
-        Users user = usersService.findByUsername(username);
-		
-		Riders rider = new Riders();
-		rider.setDrivingLicense(filename);
-		rider.setVehicle(vehicleName);
-		rider.setUser(user);
-		
-		riderService.save(rider);
-        return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
-	}
 }

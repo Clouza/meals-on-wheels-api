@@ -2,7 +2,9 @@ package com.mow.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
+import com.mow.enums.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class UserDetailsService {
 	UserDetailsRepository userDetailsRepository;
 	
 	public void save(UserDetails userDetails) {
+		userDetails.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		userDetailsRepository.save(userDetails);
 	}
 	
@@ -41,6 +44,10 @@ public class UserDetailsService {
 		userDetails.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		userDetails.setUser(user);
 		this.save(userDetails);
+	}
+
+	public List<UserDetails> getAllUsers(){
+		return userDetailsRepository.findAll();
 	}
 	
 }

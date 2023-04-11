@@ -54,40 +54,7 @@ public class MemberController {
 		return membersService.getRecords();
 	}
 	
-	@PostMapping("/upload-evidence")
-	public ResponseEntity<?> register(
-			@RequestParam("file") MultipartFile file, 
-			@RequestParam("username") String username,
-			@RequestParam("message") String message) throws IOException {
-		// uploading image to static directory
-		String filename = file.getOriginalFilename();
-	    String path = "target/classes/static/images/member";
-	    Path dir = Paths.get(path);
-	    
-        if(!Files.exists(dir)) {
-            Files.createDirectories(dir);
-        }
-        
-        try {
-            InputStream inputStream = file.getInputStream();
-            Path filePath = dir.resolve(filename);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ix) {
-            System.out.println(ix);
-            log.error("Image err " + ix.toString());
-        }
-        
-        // save User Evidence to the database
-        Users user = usersService.findByUsername(username);
-		
-		Members member = new Members();
-		member.setEvidence(filename);
-		member.setMessage(message);
-		member.setUser(user);
-		
-		membersService.save(member);
-        return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
-	}
+
 	
 	@GetMapping("/get-image")
 	public ResponseEntity<Resource> getImage(@RequestParam String imageName) throws IOException {
