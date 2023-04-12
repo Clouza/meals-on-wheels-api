@@ -8,6 +8,8 @@ import com.mow.repository.DonatorsRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class DonatorsService {
@@ -18,5 +20,8 @@ public class DonatorsService {
 	public void save(Donators donator) {
 		donatorsRepository.save(donator);
 	}
-	
+
+    public List<Donators> getDonators() {
+		return donatorsRepository.findAll();
+    }
 }

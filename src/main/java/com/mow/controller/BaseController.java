@@ -6,6 +6,7 @@ import com.mow.request.LoginRequest;
 import com.mow.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -183,10 +184,7 @@ public class BaseController {
 		riderService.save(rider);
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
-	@GetMapping("/users")
-	public List<Users> getUsersByRole(@RequestParam("role") Roles role){
-//		List<UserDetails> ud = userDetailsService.getAllUsers();
-		List<Users> ud = usersService.getByRole(role);
-		return ud;
-	}
+
+
+
 }

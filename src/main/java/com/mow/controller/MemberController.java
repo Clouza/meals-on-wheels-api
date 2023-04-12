@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import com.mow.entity.Riders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -68,4 +69,6 @@ public class MemberController {
 	        return ResponseEntity.notFound().build();
 	    }
 	}
+
+
 }
