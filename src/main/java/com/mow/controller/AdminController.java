@@ -1,6 +1,7 @@
 package com.mow.controller;
 
 import com.mow.entity.*;
+import com.mow.request.Condition;
 import com.mow.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,46 +45,31 @@ public class AdminController {
 		adminService.approve(approveRequest.getId(),approveRequest.getType());
 		return new ResponseEntity<>(JSON.stringify("Request has been approved"), HttpStatus.ACCEPTED);
 	}
-	@GetMapping("/not-approved-partners")
-	public List<Partners> getNotApprovedPartners(){
-		return partnerService.getPartners(false);
-	}
-	@GetMapping("/approved-partners")
-	public List<Partners> getApprovedPartners(){
-		return partnerService.getPartners(true);
+	@PostMapping("/get-partners")
+	public List<Partners> getPartners(@RequestBody Condition condition){
+		return partnerService.getPartners(condition.isApproved());
 	}
 
-	@GetMapping("/not-approved-members")
-	public List<Members> getNotApprovedMembers(){
-		return memberService.getMembers(false);
-	}
-	@GetMapping("/approved-members")
-	public List<Members> getApprovedMembers(){
-		return memberService.getMembers(true);
+	@PostMapping("/get-members")
+	public List<Members> getMembers(@RequestBody Condition condition){
+		return memberService.getMembers(condition.isApproved());
 	}
 
-	@GetMapping("/not-approved-riders")
-	public List<Riders> getNotApprovedRiders(){
-		return riderService.getRiders(false);
-	}
-	@GetMapping("/approved-riders")
-	public List<Riders> getApprovedRiders(){
-		return riderService.getRiders(true);
+	@PostMapping("/get-riders")
+	public List<Riders> getRiders(@RequestBody Condition condition){
+		return riderService.getRiders(condition.isApproved());
 	}
 
-	@GetMapping("/not-approved-meals")
-	public List<Meals> getNotApprovedMeals(){
-		return  mealService.getMeals(false);
-	}
-	@GetMapping("/approved-meals")
-	public List<Meals> getApprovedMeals(){
-		return mealService.getMeals(true);
+	@PostMapping("/get-meals")
+	public List<Meals> getMeals(@RequestBody Condition condition){
+		return  mealService.getMeals(condition.isApproved());
 	}
 
-	@GetMapping("/get-donators")
+	@PostMapping("/get-donators")
 	public List<Donators> getDonators(){
 		return donatorService.getDonators();
 	}
+
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteUser(@PathVariable Long id)  {
 		usersService.delete(id);
