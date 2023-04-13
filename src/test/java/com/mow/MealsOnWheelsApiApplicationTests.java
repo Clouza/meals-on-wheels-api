@@ -3,6 +3,7 @@ package com.mow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,6 +74,10 @@ class MealsOnWheelsApiApplicationTests {
 	void donatorEnpoint() throws Exception {
 		mvc.perform(get("/api/v1/donator/")).andExpect(status().isOk());
 	}
-	
+
+	@Test
+	void logoutWithoutHandler() throws Exception {
+		mvc.perform(post("/logout")).andExpect(status().is3xxRedirection());
+	}
 
 }

@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 
 @Data
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class Webhook {
+public class Webhooks {
 
     @Autowired
     JSONBuilder jsonBuilder;

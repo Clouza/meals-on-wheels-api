@@ -2,12 +2,17 @@ package com.mow.exception;
 
 import com.mow.response.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
@@ -19,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.naming.AuthenticationException;
 import java.util.Date;
 
+@Slf4j
 @EnableWebMvc
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,11 +41,58 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse.setEndpoint(this.request.getRequestURI());
         exceptionResponse.setTimestamp(new Date());
 
-        if(httpStatus.equals(HttpStatus.INTERNAL_SERVER_ERROR) || httpStatus.equals(HttpStatus.BAD_REQUEST)) {
+        if(httpStatus.equals(HttpStatus.INTERNAL_SERVER_ERROR) || exception instanceof HttpClientErrorException) {
             exceptionResponse.setResponse("Contact the developer to find out more");
+            log.error(String.format("%s (%s)", exception.getMessage(), exception.getClass()));
+        }
+
+        if(exception instanceof HttpMessageNotReadableException) {
+            exceptionResponse.setResponse("Request body should not be empty");
+            log.error(String.format("%s (%s)", exception.getMessage(), exception.getClass()));
         }
 
         return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), httpStatus);
+    }
+
+    // 400
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(
+            MissingServletRequestParameterException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        return this.exceptionResponse(exception, HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(
+            TypeMismatchException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        return this.exceptionResponse(exception, HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        return this.exceptionResponse(exception, HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleBindException(
+            BindException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        return this.exceptionResponse(exception, HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
     // 404
@@ -76,7 +129,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return this.exceptionResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
 
-    // 400
+    // Http Client
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<?> handleHttpClient(HttpClientErrorException httpClientErrorException) {
         return this.exceptionResponse(httpClientErrorException, (HttpStatus) httpClientErrorException.getStatusCode(), httpClientErrorException.getStatusText());
