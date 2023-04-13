@@ -1,6 +1,7 @@
 package com.mow.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mow.enums.Providers;
 import com.mow.enums.Roles;
 
 import jakarta.persistence.CascadeType;
@@ -38,22 +39,32 @@ public class Users {
 	@Column(name = "email", unique = true, nullable = false)
 	String email;
 	
-	@Column(name = "roles", nullable = false)
+	@Column(name = "roles", nullable = true)
 	@Enumerated(EnumType.STRING)
 	Roles role;
 
+	@Column(name = "provider_id", nullable = true)
+	String providerId;
+
+	@Column(name = "provider", nullable = false)
+	@Enumerated(EnumType.STRING)
+	Providers provider;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	UserDetails userDetails;
+
 	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Admins admins;
+
 	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Members members;
+
 	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Partners partners;
+
 	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Riders riders;

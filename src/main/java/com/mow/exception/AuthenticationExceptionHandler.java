@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -14,6 +15,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 import java.util.Date;
 
+@Slf4j
 public class AuthenticationExceptionHandler implements AuthenticationEntryPoint {
 
     @Autowired
@@ -21,10 +23,9 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
 
     private String jwtException = null;
 
-    // 401, 403
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException, ServletException {
-        if(jsonBuilder.getCollections().get("class").equals(SignatureException.class)) {
+        if(jsonBuilder.getCollections().get("class") != null && jsonBuilder.getCollections().get("class").equals(SignatureException.class)) {
             jwtException = (String) jsonBuilder.getCollections().get("response");
         }
 
@@ -39,6 +40,7 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
                         .timestamp(new Date())
                         .build().stringify()
         );
+        log.error(String.format("%s (%s)", authenticationException.getMessage(), authenticationException.getClass()));
         jsonBuilder.clear();
     }
 

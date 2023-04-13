@@ -42,19 +42,19 @@ public class AdminsService {
 	}
 	
 	public void approve(Long id,String type) {
-		if(type.equals("member")) {
+		if(type.equalsIgnoreCase("member")) {
 			Members members = membersRepository.findById(id).get();
 			members.setApproved(true);
 			membersRepository.save(members);
 		}
 		
-		if(type.equals("rider")) {
+		if(type.equalsIgnoreCase("rider")) {
 			Riders riders= ridersRepository.findById(id).get();
 			riders.setApproved(true);
 			ridersRepository.save(riders);
 		}
 		
-		if(type.equals("partner")){
+		if(type.equalsIgnoreCase("partner")){
 			Partners partners= partnerRepository.findById(id).get();
 			partners.setApproved(true);
 			partnerRepository.save(partners);

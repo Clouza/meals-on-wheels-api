@@ -14,5 +14,28 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: boolean
 
+  # social
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            clientId: yourClientId
+            clientSecret: yourClientSecret
+            redirectUri: path
+            scope:
+              - email
+              - public_profile
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=name,email,picture.width(250).height(250)
 jwt:
   key: secret-key
+
+webhook:
+  discord:
+    url: https://discord.com/api/webhooks/
+    clientId: yourClientId
+    token: secret-token

@@ -1,5 +1,6 @@
 package com.mow.jwt;
 
+import com.mow.properties.JWTProperties;
 import com.mow.utils.JSONBuilder;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

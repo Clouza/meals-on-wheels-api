@@ -1,7 +1,9 @@
 package com.mow.controller;
 
 import com.mow.entity.*;
+import com.mow.enums.Providers;
 import com.mow.jwt.JWTService;
+import com.mow.request.GlobalRequest;
 import com.mow.request.LoginRequest;
 import com.mow.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +34,16 @@ public class BaseController {
 
 	@Autowired
 	UsersService usersService;
+
 	@Autowired
 	PartnersService partnerService;
+
 	@Autowired
 	MembersService membersService;
+
 	@Autowired
 	RidersService riderService;
+
 	@Autowired
 	UserDetailsService userDetailsService;
 
@@ -75,11 +81,12 @@ public class BaseController {
 		}
 		
 		credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
+		credentials.setProvider(Providers.LOCAL);
 		usersService.save(credentials);
 
-		UserDetails ud = new UserDetails();
-		ud.setUser(credentials);
-		userDetailsService.save(ud);
+		UserDetails userDetails = new UserDetails();
+		userDetails.setUser(credentials);
+		userDetailsService.save(userDetails);
 		
 		return ResponseEntity.ok().body(JSON.stringify("Account created"));
 	}
@@ -96,7 +103,7 @@ public class BaseController {
 			}
 		}
 
-		return ResponseEntity.ok().body(JSON.stringify("Credentials incorrect"));
+		return ((BodyBuilder) ResponseEntity.notFound()).body(JSON.stringify("Credentials incorrect"));
 	}
 
 	// update profile
@@ -105,16 +112,28 @@ public class BaseController {
 		userDetailsService.updateProfile(profile);
 		return ResponseEntity.accepted().body(JSON.stringify("Profile updated"));
 	}
+
+	// add user to partner (role: partner)
 	@PostMapping("/register-partner")
-	public ResponseEntity<?> registerPartner(@RequestParam("username") String username){
-		Users user = usersService.findByUsername(username);
-		System.out.println(username);
+	public ResponseEntity<?> registerPartner(@RequestBody GlobalRequest request){
+		Users user = usersService.findByUsername(request.get("username"));
 		Partners partner = new Partners();
 		partner.setUser(user);
-		partnerService.save(partner);
 
-		return ResponseEntity.ok().body(JSON.stringify("Account successfully"));
+		if(user == null) {
+			return new ResponseEntity<>(JSON.stringify("Username not found"), HttpStatus.NOT_FOUND);
+		}
+
+		if(user.getPartners() == null) {
+			user.setRole(Roles.PARTNER); // assign role to partner
+			usersService.save(user);
+			partnerService.save(partner);
+		} else {
+			return new ResponseEntity<>(JSON.stringify("Account already registered"), HttpStatus.NOT_ACCEPTABLE);
+		}
+		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
 	}
+	
 	@PostMapping("/upload-evidence")
 	public ResponseEntity<?> registerMember(
 			@RequestParam("file") MultipartFile file,
@@ -149,6 +168,7 @@ public class BaseController {
 		membersService.save(member);
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
+	
 	@PostMapping("/upload-data")
 	public ResponseEntity<?> registerRider(
 			@RequestParam("file") MultipartFile file,
@@ -185,6 +205,6 @@ public class BaseController {
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
 
-
+	
 
 }

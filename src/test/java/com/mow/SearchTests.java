@@ -17,7 +17,6 @@ import com.mow.repository.MealsRepository;
 import com.mow.search.MealsSpecification;
 import com.mow.search.SearchCriteria;
 
-@AutoConfigureMockMvc
 @SpringBootTest
 public class SearchTests {
 
