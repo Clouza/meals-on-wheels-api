@@ -58,7 +58,7 @@ public class PartnerController {
 		mealsService.save(mealsRequest);
 		return new ResponseEntity<>(JSON.stringify("Meal has been saved"), HttpStatus.CREATED);
 	}
-	
+
 
 	
 }

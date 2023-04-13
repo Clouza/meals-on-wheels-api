@@ -55,4 +55,6 @@ public class MemberController {
 
 		return ResponseEntity.notFound().build();
 	}
+
+
 }

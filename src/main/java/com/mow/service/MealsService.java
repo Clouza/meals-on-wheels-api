@@ -54,5 +54,9 @@ public class MealsService {
 	public List<Meals> getMeals() {
 		return mealsRepository.findAll();
 	}
+	public List<Meals> getMeals(boolean condition) {
+		return mealsRepository.findByApproved(condition);
+	}
+
 	
 }

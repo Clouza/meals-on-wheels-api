@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import com.mow.entity.Riders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,8 @@ public class MembersService {
 	public List<Members> getRecords() {
 		return membersRepository.findAll();
 	}
-	
+
+    public List<Members> getMembers(boolean condition) {
+		return membersRepository.findByApproved(condition);
+    }
 }
