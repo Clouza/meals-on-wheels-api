@@ -249,10 +249,4 @@ public class BaseController {
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
 
-<<<<<<< HEAD
 }
-=======
-	
-
-}
->>>>>>> 78d6ad23e791e43a264718cf692958e3905e445a
