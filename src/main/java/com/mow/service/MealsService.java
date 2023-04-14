@@ -22,27 +22,28 @@ public class MealsService {
 	MealsRepository mealsRepository;
 	
 	@Autowired
-	CategoriesService categoriesService; 
-	
+	CategoriesService categoriesService;
+
 	public void save(MealsRequest meals) {
 		Meals meal = new Meals();
 		Categories category = new Categories();
-		
+
 		if(meals.getCategoryId() != null) {
 			// category by id
 			category = categoriesService.getCategoryById(meals.getCategoryId());
 		}
-		
+
 		// new category
 		if(meals.getCategoryId() == null) {
 			category.setName(meals.getCategoryName());
 			category = categoriesService.save(category);
 		}
-		
+
 		meal.setName(meals.getName());
 		meal.setDescription(meals.getDescription());
 		meal.setPicture(meals.getPicture());
 		meal.setStock(meals.getStock());
+		meal.setPostedBy(meals.getPostedBy());
 
 		meal.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		meal.setRating(0);
