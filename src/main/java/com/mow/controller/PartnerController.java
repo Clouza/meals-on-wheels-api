@@ -1,22 +1,15 @@
 package com.mow.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mow.entity.Meals;
 import com.mow.entity.Partners;
-import com.mow.entity.Riders;
-import com.mow.entity.Users;
 import com.mow.request.MealsRequest;
 import com.mow.response.JSONResponse;
 import com.mow.service.MealsService;
@@ -48,9 +41,10 @@ public class PartnerController {
 	public List<Meals> getMeals() {
 		return mealsService.getMeals();
 	}
-	@GetMapping("/partners")
-	public List<Partners> getPartners() {
-		return partnerService.getPartners();
+
+	@GetMapping("/get-partner/{id}")
+	public Optional<Partners> getPartner(@PathVariable Long id){
+		return partnerService.getPartner(id);
 	}
 	
 	@PostMapping("/meals")

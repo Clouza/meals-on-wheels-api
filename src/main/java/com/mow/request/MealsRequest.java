@@ -1,5 +1,6 @@
 package com.mow.request;
 
+import com.mow.entity.Partners;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,6 @@ public class MealsRequest {
 	int stock;
 	Long categoryId;
 	String categoryName;
+	Partners postedBy;
 	
 }
