@@ -2,9 +2,12 @@ package com.mow.controller;
 
 import com.mow.entity.*;
 import com.mow.enums.Providers;
+import com.mow.enums.Roles;
 import com.mow.jwt.JWTService;
 import com.mow.request.GlobalRequest;
 import com.mow.request.LoginRequest;
+import com.mow.request.UserDetailsRequest;
+import com.mow.response.JSONResponse;
 import com.mow.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import com.mow.enums.Roles;
-import com.mow.request.UserDetailsRequest;
-import com.mow.response.JSONResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -49,7 +47,7 @@ public class BaseController {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	JSONResponse JSON;
 
@@ -65,21 +63,21 @@ public class BaseController {
 	public ResponseEntity<?> postRegistration(@RequestBody Users credentials) {
 		Users username = usersService.findByUsername(credentials.getUsername());
 		Users userEmail = usersService.findByEmail(credentials.getEmail());
-		
+
 		if(username != null) {
 			// username already taken
 			if(username.getUsername().equals(credentials.getUsername())) {
 				return ((BodyBuilder) ResponseEntity.notFound()).body(JSON.stringify("Username already taken"));
 			}
 		}
-		
+
 		if(userEmail != null) {
 			// email already taken
 			if(userEmail.getEmail().equals(credentials.getEmail())) {
 				return ((BodyBuilder) ResponseEntity.notFound()).body(JSON.stringify("Email already taken"));
 			}
 		}
-		
+
 		credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
 		credentials.setProvider(Providers.LOCAL);
 		usersService.save(credentials);
@@ -87,7 +85,7 @@ public class BaseController {
 		UserDetails userDetails = new UserDetails();
 		userDetails.setUser(credentials);
 		userDetailsService.save(userDetails);
-		
+
 		return ResponseEntity.ok().body(JSON.stringify("Account created"));
 	}
 
@@ -133,12 +131,26 @@ public class BaseController {
 		}
 		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
 	}
-	
-	@PostMapping("/upload-evidence")
+
+	@PostMapping("/upload/{type}")
 	public ResponseEntity<?> registerMember(
+			@PathVariable(name = "type") String type,
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("username") String username,
-			@RequestParam("message") String message, Members member) throws IOException {
+			@RequestParam("text") String text, Members member, Riders rider) throws IOException {
+
+		// check if type is available in roles enum
+		boolean isRoleExists = false;
+		for(Roles role: Roles.values()) {
+			if (type.equalsIgnoreCase(role.name())) {
+				isRoleExists = true;
+				break;
+			}
+		}
+
+		if(!isRoleExists) {
+			return new ResponseEntity<>(JSON.stringify(type + " is not available"), HttpStatus.NOT_ACCEPTABLE);
+		}
 
 		// image required
 		if(file.isEmpty()) {
@@ -151,14 +163,14 @@ public class BaseController {
 			return new ResponseEntity<>(JSON.stringify("Username not found"), HttpStatus.NOT_FOUND);
 		}
 
-		// check if user has sent an evidence
-		if(user.getMembers() != null) {
-			return new ResponseEntity<>(JSON.stringify("You have sent the evidence"), HttpStatus.NOT_ACCEPTABLE);
+		// check if user has sent an image
+		if(user.getMembers() != null && type.equalsIgnoreCase(Roles.MEMBER.name()) || user.getRiders() != null && type.equalsIgnoreCase(Roles.RIDER.name())) {
+			return new ResponseEntity<>(JSON.stringify("You have sent the image"), HttpStatus.NOT_ACCEPTABLE);
 		}
 
 		// uploading image to static directory
 		String filename = String.format("%s - %s", user.getUserId(), file.getOriginalFilename());
-		String path = "target/classes/static/images/member";
+		String path = "target/classes/static/images/" + type;
 		Path dir = Paths.get(path);
 
 		// check directory
@@ -180,71 +192,27 @@ public class BaseController {
 			log.error(exception.getMessage());
 		}
 
-		user.setRole(Roles.MEMBER); // assign role
-		member.setEvidence(filename);
-		member.setMessage(message);
-		member.setUser(user);
+		if(type.equalsIgnoreCase(Roles.MEMBER.name())) {
+			user.setRole(Roles.MEMBER); // assign role
+			member.setEvidence(filename);
+			member.setMessage(text); // message
+			member.setUser(user);
 
-		// save to database
-		usersService.save(user);
-		membersService.save(member);
-
-		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
-	}
-	
-	@PostMapping("/upload-driverlicense")
-	public ResponseEntity<?> registerRider(
-			@RequestParam("file") MultipartFile file,
-			@RequestParam("username") String username,
-			@RequestParam("vehicleName") String vehicleName, Riders rider) throws IOException {
-
-
-		// image required
-		if(file.isEmpty()) {
-			return new ResponseEntity<>(JSON.stringify("Image required"), HttpStatus.BAD_REQUEST);
+			// save to database
+			usersService.save(user);
+			membersService.save(member);
 		}
 
-		// check user
-		Users user = usersService.findByUsername(username);
-		if(user == null) {
-			return new ResponseEntity<>(JSON.stringify("Username not found"), HttpStatus.NOT_FOUND);
+		if(type.equalsIgnoreCase(Roles.RIDER.name())) {
+			user.setRole(Roles.RIDER); // assign role
+			rider.setDrivingLicense(filename);
+			rider.setVehicle(text); // vehicle name
+			rider.setUser(user);
+
+			// save to database
+			usersService.save(user);
+			riderService.save(rider);
 		}
-
-		// check if user has sent an evidence
-		if(user.getRiders() != null) {
-			return new ResponseEntity<>(JSON.stringify("You have sent the evidence"), HttpStatus.NOT_ACCEPTABLE);
-		}
-
-		// uploading image to static directory
-		String filename = String.format("%s - %s", user.getUserId(), file.getOriginalFilename());
-		String path = "target/classes/static/images/rider";
-		Path dir = Paths.get(path);
-
-		if(!Files.exists(dir)) {
-			Files.createDirectories(dir);
-		}
-
-		// check image size
-		if(file.getSize() > 2000000) { // 2MB
-			return new ResponseEntity<>(JSON.stringify("Image size should be less than 2MB"), HttpStatus.NOT_ACCEPTABLE);
-		}
-
-		try {
-			InputStream inputStream = file.getInputStream();
-			Path filePath = dir.resolve(filename);
-			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException exception) {
-			log.error(exception.getMessage());
-		}
-
-		user.setRole(Roles.RIDER); // assign role
-		rider.setDrivingLicense(filename);
-		rider.setVehicle(vehicleName);
-		rider.setUser(user);
-
-		// save to database
-		usersService.save(user);
-		riderService.save(rider);
 
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
