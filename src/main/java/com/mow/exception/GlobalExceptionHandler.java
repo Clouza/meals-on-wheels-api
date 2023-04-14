@@ -11,12 +11,14 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -48,6 +50,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         if(exception instanceof HttpMessageNotReadableException) {
             exceptionResponse.setResponse("Request body should not be empty");
+            log.error(String.format("%s (%s)", exception.getMessage(), exception.getClass()));
+        }
+
+        if(exception instanceof MaxUploadSizeExceededException) {
+            exceptionResponse.setResponse("Image size should be less than 2MB");
+            log.error(String.format("%s (%s)", exception.getMessage(), exception.getClass()));
+        }
+
+        if(exception instanceof HttpMediaTypeNotSupportedException) {
+            exceptionResponse.setResponse("Media Type not supported");
             log.error(String.format("%s (%s)", exception.getMessage(), exception.getClass()));
         }
 
@@ -123,16 +135,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return this.exceptionResponse(exception, HttpStatus.METHOD_NOT_ALLOWED, HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
     }
 
-    // 500
+    // 415
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
+            HttpMediaTypeNotSupportedException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        return this.exceptionResponse(exception, HttpStatus.UNSUPPORTED_MEDIA_TYPE, HttpStatus.UNSUPPORTED_MEDIA_TYPE.getReasonPhrase());
+    }
+        // 500
     @ExceptionHandler(value = {RuntimeException.class, Exception.class})
-    public ResponseEntity<?> handleAnyException(RuntimeException exception) {
+    protected ResponseEntity<?> handleAnyException(RuntimeException exception) {
         return this.exceptionResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
 
     // Http Client
     @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<?> handleHttpClient(HttpClientErrorException httpClientErrorException) {
+    protected ResponseEntity<?> handleHttpClient(HttpClientErrorException httpClientErrorException) {
         return this.exceptionResponse(httpClientErrorException, (HttpStatus) httpClientErrorException.getStatusCode(), httpClientErrorException.getStatusText());
+    }
+
+    // Upload size
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<?> handleMaxSize(MaxUploadSizeExceededException exception) {
+        return this.exceptionResponse(exception, HttpStatus.NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE.getReasonPhrase());
     }
 
 }

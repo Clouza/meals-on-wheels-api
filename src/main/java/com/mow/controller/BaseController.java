@@ -138,44 +138,85 @@ public class BaseController {
 	public ResponseEntity<?> registerMember(
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("username") String username,
-			@RequestParam("message") String message) throws IOException {
+			@RequestParam("message") String message, Members member) throws IOException {
+
+		// image required
+		if(file.isEmpty()) {
+			return new ResponseEntity<>(JSON.stringify("Image required"), HttpStatus.BAD_REQUEST);
+		}
+
+		// check user
+		Users user = usersService.findByUsername(username);
+		if(user == null) {
+			return new ResponseEntity<>(JSON.stringify("Username not found"), HttpStatus.NOT_FOUND);
+		}
+
+		// check if user has sent an evidence
+		if(user.getMembers() != null) {
+			return new ResponseEntity<>(JSON.stringify("You have sent the evidence"), HttpStatus.NOT_ACCEPTABLE);
+		}
+
 		// uploading image to static directory
-		String filename = file.getOriginalFilename();
+		String filename = String.format("%s - %s", user.getUserId(), file.getOriginalFilename());
 		String path = "target/classes/static/images/member";
 		Path dir = Paths.get(path);
 
+		// check directory
 		if(!Files.exists(dir)) {
 			Files.createDirectories(dir);
 		}
 
+		// check image size
+		if(file.getSize() > 2000000) { // 2MB
+			return new ResponseEntity<>(JSON.stringify("Image size should be less than 2MB"), HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		// save image to directory
 		try {
 			InputStream inputStream = file.getInputStream();
 			Path filePath = dir.resolve(filename);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException ix) {
-			System.out.println(ix);
-			log.error("Image err " + ix.toString());
+		} catch (IOException exception) {
+			log.error(exception.getMessage());
 		}
 
-		// save User Evidence to the database
-		Users user = usersService.findByUsername(username);
-
-		Members member = new Members();
+		user.setRole(Roles.MEMBER); // assign role
 		member.setEvidence(filename);
 		member.setMessage(message);
 		member.setUser(user);
 
+		// save to database
+		usersService.save(user);
 		membersService.save(member);
+
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
 	
-	@PostMapping("/upload-data")
+	@PostMapping("/upload-driverlicense")
 	public ResponseEntity<?> registerRider(
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("username") String username,
-			@RequestParam("vehicleName") String vehicleName) throws IOException {
+			@RequestParam("vehicleName") String vehicleName, Riders rider) throws IOException {
+
+
+		// image required
+		if(file.isEmpty()) {
+			return new ResponseEntity<>(JSON.stringify("Image required"), HttpStatus.BAD_REQUEST);
+		}
+
+		// check user
+		Users user = usersService.findByUsername(username);
+		if(user == null) {
+			return new ResponseEntity<>(JSON.stringify("Username not found"), HttpStatus.NOT_FOUND);
+		}
+
+		// check if user has sent an evidence
+		if(user.getRiders() != null) {
+			return new ResponseEntity<>(JSON.stringify("You have sent the evidence"), HttpStatus.NOT_ACCEPTABLE);
+		}
+
 		// uploading image to static directory
-		String filename = file.getOriginalFilename();
+		String filename = String.format("%s - %s", user.getUserId(), file.getOriginalFilename());
 		String path = "target/classes/static/images/rider";
 		Path dir = Paths.get(path);
 
@@ -183,28 +224,34 @@ public class BaseController {
 			Files.createDirectories(dir);
 		}
 
+		// check image size
+		if(file.getSize() > 2000000) { // 2MB
+			return new ResponseEntity<>(JSON.stringify("Image size should be less than 2MB"), HttpStatus.NOT_ACCEPTABLE);
+		}
+
 		try {
 			InputStream inputStream = file.getInputStream();
 			Path filePath = dir.resolve(filename);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException ix) {
-			System.out.println(ix);
-			log.error("Image err " + ix.toString());
-
+		} catch (IOException exception) {
+			log.error(exception.getMessage());
 		}
 
-		// save User Evidence to the database
-		Users user = usersService.findByUsername(username);
-
-		Riders rider = new Riders();
+		user.setRole(Roles.RIDER); // assign role
 		rider.setDrivingLicense(filename);
 		rider.setVehicle(vehicleName);
 		rider.setUser(user);
 
+		// save to database
+		usersService.save(user);
 		riderService.save(rider);
+
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
 
 
 
+
 }
+
+
