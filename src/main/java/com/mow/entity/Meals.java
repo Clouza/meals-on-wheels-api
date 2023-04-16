@@ -25,9 +25,9 @@ public class Meals {
 	String description;
 	
 	@Column(name = "rating", nullable = false)
-	float rating;
+	double rating;
 	@Column(name = "total_rating", nullable = false)
-	double totalRatings;
+	int totalRatings;
 	
 	@Column(name = "stock", nullable = false)
 	int stock;

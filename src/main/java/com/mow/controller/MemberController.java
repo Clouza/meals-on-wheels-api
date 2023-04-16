@@ -2,6 +2,7 @@ package com.mow.controller;
 
 import com.mow.entity.Members;
 import com.mow.entity.OrderHistories;
+import com.mow.request.Rating;
 import com.mow.response.JSONResponse;
 import com.mow.service.MembersService;
 import com.mow.service.OrderHistoriesService;
@@ -43,6 +44,12 @@ public class MemberController {
 	public ResponseEntity<?> orderMeals(@RequestBody OrderHistories orderHistories){
 		orderHistoriesService.save(orderHistories);
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Order"));
+	}
+
+	@PutMapping("rate-service")
+	public ResponseEntity<?> rateService(@RequestBody Rating rating){
+		membersService.addRatingToRiderAndMeals(rating.getRiders(), rating.getRidersRating(), rating.getMeals(), rating.getMealsRating());
+		return ResponseEntity.ok().body(JSON.stringify("Successfully Giving rating to Rider and Meals"));
 	}
 
 }
