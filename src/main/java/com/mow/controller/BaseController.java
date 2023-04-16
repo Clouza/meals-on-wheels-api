@@ -62,6 +62,25 @@ public class BaseController {
 		return "index endpoint";
 	}
 
+	@GetMapping(value = "/get-image")
+	public ResponseEntity<Resource> getImage(@RequestBody GlobalRequest request) throws IOException {
+		String path = "target/classes/static/images/member";
+		Path imageFilePath = Paths.get(path).resolve(request.get("imageName"));
+		Resource imageResource = new FileSystemResource(imageFilePath.toFile());
+
+		if (imageResource.exists() && imageResource.isReadable()) {
+			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageResource);
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/user/{token}")
+	public Users getUserById(@PathVariable String token) {
+		String username = jwtService.extractUsername(token);
+		return usersService.getRecordByUsername(username);
+	}
+
 	@PostMapping("/registration")
 	public ResponseEntity<?> postRegistration(@RequestBody Users credentials) {
 		Users username = usersService.findByUsername(credentials.getUsername());
@@ -105,13 +124,6 @@ public class BaseController {
 		}
 
 		return ((BodyBuilder) ResponseEntity.notFound()).body(JSON.stringify("Credentials incorrect"));
-	}
-
-	// update profile
-	@PutMapping("/profile")
-	public ResponseEntity<?> putProfile(@RequestBody UserDetailsRequest profile) {
-		userDetailsService.updateProfile(profile);
-		return ResponseEntity.accepted().body(JSON.stringify("Profile updated"));
 	}
 
 	// add user to partner (role: partner)
@@ -220,17 +232,11 @@ public class BaseController {
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
 
-	@GetMapping(value = "/get-image")
-	public ResponseEntity<Resource> getImage(@RequestBody GlobalRequest request) throws IOException {
-		String path = "target/classes/static/images/member";
-		Path imageFilePath = Paths.get(path).resolve(request.get("imageName"));
-		Resource imageResource = new FileSystemResource(imageFilePath.toFile());
-
-		if (imageResource.exists() && imageResource.isReadable()) {
-			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageResource);
-		}
-
-		return ResponseEntity.notFound().build();
+	// update profile
+	@PutMapping("/profile")
+	public ResponseEntity<?> putProfile(@RequestBody UserDetailsRequest profile) {
+		userDetailsService.updateProfile(profile);
+		return ResponseEntity.accepted().body(JSON.stringify("Profile updated"));
 	}
 
 }

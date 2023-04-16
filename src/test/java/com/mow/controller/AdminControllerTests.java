@@ -61,7 +61,7 @@ public class AdminControllerTests {
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    void deleteUserById() throws Exception {
+    void deleteUserById() throws Exception { // record must exist first
         mvc.perform(delete("/api/v1/admin//delete/" + 2L)).andExpect(status().isOk());
     }
 

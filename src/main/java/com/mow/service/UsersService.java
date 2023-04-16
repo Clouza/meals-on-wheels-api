@@ -2,6 +2,7 @@ package com.mow.service;
 
 import com.mow.enums.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.mow.entity.Users;
@@ -41,4 +42,12 @@ public class UsersService {
 		}
 		return false;
     }
+
+    public Users getRecordById(Long id) {
+		return usersRepository.findById(id).get();
+    }
+
+	public Users getRecordByUsername(String username) {
+		return usersRepository.findByUsername(username);
+	}
 }
