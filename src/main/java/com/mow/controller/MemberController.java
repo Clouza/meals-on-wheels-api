@@ -8,6 +8,7 @@ import com.mow.service.OrderHistoriesService;
 import com.mow.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +39,10 @@ public class MemberController {
 		return membersService.getRecords();
 	}
 
-	@GetMapping("get-order/{status}")
-	public List<OrderHistories> getOrderHistory(@PathVariable("status") String status){
-		return  orderHistoriesService.getOrderHistories(status);
+	@GetMapping("/order-meals")
+	public ResponseEntity<?> orderMeals(@RequestBody OrderHistories orderHistories){
+		orderHistoriesService.save(orderHistories);
+		return ResponseEntity.ok().body(JSON.stringify("Successfully Order"));
 	}
 
 }

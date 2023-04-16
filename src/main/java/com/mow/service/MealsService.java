@@ -46,7 +46,6 @@ public class MealsService {
 		meal.setPostedBy(meals.getPostedBy());
 
 		meal.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
-		meal.setRating(0);
 		meal.setApproved(false);
 		meal.setCategory(category);
 		mealsRepository.save(meal);

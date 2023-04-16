@@ -26,6 +26,8 @@ public class Meals {
 	
 	@Column(name = "rating", nullable = false)
 	float rating;
+	@Column(name = "total_rating", nullable = false)
+	double totalRatings;
 	
 	@Column(name = "stock", nullable = false)
 	int stock;

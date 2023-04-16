@@ -47,4 +47,10 @@ public class RiderController {
 	public List<OrderHistories> getOrderHistory(@PathVariable("status") String status){
 		return  orderHistoriesService.getOrderHistories(status);
 	}
+
+	@PutMapping("handle-order")
+	public ResponseEntity<?> handleOrder(@RequestBody OrderHistories orderHistories){
+		orderHistoriesService.save(orderHistories);
+		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
+	}
 }
