@@ -33,7 +33,12 @@ public class UsersService {
 		return usersRepository.findByRole(role);
 	}
 
-    public void delete(Long userId) {
-		usersRepository.deleteById(userId);
+    public boolean delete(Long userId) {
+		boolean isUserExists = usersRepository.existsById(userId);
+		if(isUserExists) {
+			usersRepository.deleteById(userId);
+			return true;
+		}
+		return false;
     }
 }

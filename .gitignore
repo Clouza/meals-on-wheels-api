@@ -32,8 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
-### Log ###
+### Log & Generated file ###
 log/
+src/main/asciidoc/
 
 ### settings ###
 src/main/resources/application.yml

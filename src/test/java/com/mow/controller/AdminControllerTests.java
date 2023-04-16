@@ -3,21 +3,29 @@ package com.mow.controller;
 import com.mow.utils.JSONBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@ExtendWith({ RestDocumentationExtension.class, SpringExtension.class})
 public class AdminControllerTests {
 
     @Autowired
@@ -27,10 +35,11 @@ public class AdminControllerTests {
     private MockMvc mvc;
 
     @BeforeEach
-    void setup() {
+    void setup(RestDocumentationContextProvider restDocumentation) {
         this.mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
+                .apply(documentationConfiguration(restDocumentation))
                 .build();
     }
 
@@ -44,7 +53,16 @@ public class AdminControllerTests {
                 put("/api/v1/admin/approve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-        ).andExpect(status().isAccepted());
+        ).andExpect(status().isAccepted()).andDo(document("index",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()))
+        );
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void deleteUserById() throws Exception {
+        mvc.perform(delete("/api/v1/admin//delete/" + 2L)).andExpect(status().isOk());
     }
 
 }

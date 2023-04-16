@@ -42,6 +42,11 @@ public class PartnerController {
 		return mealsService.getMeals();
 	}
 
+	@GetMapping("/partners")
+	public List<Partners> getPartners() {
+		return partnerService.getPartners();
+	}
+
 	@GetMapping("/get-partner/{id}")
 	public Optional<Partners> getPartner(@PathVariable Long id){
 		return partnerService.getPartner(id);
@@ -53,6 +58,4 @@ public class PartnerController {
 		return new ResponseEntity<>(JSON.stringify("Meal has been saved"), HttpStatus.CREATED);
 	}
 
-
-	
 }

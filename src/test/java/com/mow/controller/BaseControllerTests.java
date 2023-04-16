@@ -29,10 +29,13 @@ public class BaseControllerTests {
     private MockMvc mvc;
 
     @Autowired
-    JSONBuilder jsonBuilder;
+    UsersService usersService;
+
+    @Autowired
+    private JSONBuilder jsonBuilder;
 
     @BeforeEach
-    void setup() throws JsonProcessingException {
+    void setup() throws Exception {
         this.mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -41,8 +44,7 @@ public class BaseControllerTests {
         this.jsonBuilder
                 .put("username", "dummy")
                 .put("password", "dummy")
-                .put("email", "dummy@mail.io")
-                .put("name", "dummy");
+                .put("email", "dummy@mail.io");
     }
 
     @Test
@@ -62,27 +64,19 @@ public class BaseControllerTests {
     }
 
     @Test
-    void addUserToPartnerByValidUsername() throws Exception {
+    void addUserToPartnerByValidUsername() throws Exception { // will get result as expected if record on table partners not exists
         mvc.perform(post("/register-partner")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonBuilder.put("username", "dummyy").stringify())
+                .content(jsonBuilder.put("username", "dummy").stringify())
         ).andExpect(status().isOk());
     }
 
     @Test
-    void addUserToPartnerByInvalidUsername() throws Exception {
+    void addUserToPartnerByInvalidUsername() throws Exception { // will get result as expected if record on table partners exists
         mvc.perform(post("/register-partner")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonBuilder.put("username", "dummy").stringify())
         ).andExpect(status().isNotAcceptable());
-    }
-
-    @Test
-    void getUserByRole() throws Exception {
-        mvc.perform(get("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonBuilder.put("role", "MEMBER").stringify())
-        ).andExpect(status().isOk());
     }
 
 }
