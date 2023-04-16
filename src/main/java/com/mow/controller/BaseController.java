@@ -11,7 +11,10 @@ import com.mow.response.JSONResponse;
 import com.mow.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -215,6 +218,19 @@ public class BaseController {
 		}
 
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
+	}
+
+	@GetMapping(value = "/get-image")
+	public ResponseEntity<Resource> getImage(@RequestBody GlobalRequest request) throws IOException {
+		String path = "target/classes/static/images/member";
+		Path imageFilePath = Paths.get(path).resolve(request.get("imageName"));
+		Resource imageResource = new FileSystemResource(imageFilePath.toFile());
+
+		if (imageResource.exists() && imageResource.isReadable()) {
+			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageResource);
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 }

@@ -8,6 +8,10 @@ import com.mow.repository.OrderHistoriesRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
 @Service
 @Transactional
 public class OrderHistoriesService {
@@ -18,5 +22,7 @@ public class OrderHistoriesService {
 	public void save(OrderHistories orderHistory) {
 		orderHistoriesRepository.save(orderHistory);
 	}
-	
+	public List<OrderHistories> getOrderHistories(String condition){
+		return orderHistoriesRepository.findByStatus(condition);
+	}
 }

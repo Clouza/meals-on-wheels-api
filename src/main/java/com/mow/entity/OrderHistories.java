@@ -24,11 +24,11 @@ public class OrderHistories {
 	String createdAt;
 
 	@OneToOne
-	@JoinColumn(name = "meal_id")
+	@JoinColumn(name = "meal_id",nullable = false)
 	Meals meals;
 
 	@ManyToOne
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "member_id",nullable = false)
 	Members member;
 
 	@ManyToOne

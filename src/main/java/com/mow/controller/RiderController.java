@@ -8,14 +8,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import com.mow.entity.OrderHistories;
+import com.mow.service.OrderHistoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mow.entity.Members;
@@ -35,6 +32,8 @@ public class RiderController {
 	@Autowired
 	RidersService riderService;
 	@Autowired
+	OrderHistoriesService orderHistoriesService;
+	@Autowired
 	UsersService usersService;
 	@Autowired
 	JSONResponse JSON;
@@ -44,4 +43,14 @@ public class RiderController {
 		return "rider endpoint";
 	}
 
+	@GetMapping("get-order/{status}")
+	public List<OrderHistories> getOrderHistory(@PathVariable("status") String status){
+		return  orderHistoriesService.getOrderHistories(status);
+	}
+
+	@PutMapping("handle-order")
+	public ResponseEntity<?> handleOrder(@RequestBody OrderHistories orderHistories){
+		orderHistoriesService.save(orderHistories);
+		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
+	}
 }

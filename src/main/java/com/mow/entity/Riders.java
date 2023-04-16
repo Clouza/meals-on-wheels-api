@@ -27,6 +27,9 @@ public class Riders {
 	
 	@Column(name = "rating", nullable = false)
 	double rating;
+
+	@Column(name = "total_rating", nullable = false)
+	int totalRatings;
 	
 	@Column(name = "approved", nullable = false)
 	boolean approved;
