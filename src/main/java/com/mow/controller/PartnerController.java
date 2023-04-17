@@ -61,4 +61,10 @@ public class PartnerController {
 		return new ResponseEntity<>(JSON.stringify("Meal has been saved"), HttpStatus.CREATED);
 	}
 
+	@PutMapping("/meals")
+	public ResponseEntity<?> putMeals(@RequestBody Meals meals) {
+		mealsService.updateMeal(meals);
+		return ResponseEntity.ok().body(JSON.stringify("Meal updated"));
+	}
+
 }
