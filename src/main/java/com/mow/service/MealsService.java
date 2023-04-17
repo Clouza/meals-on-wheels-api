@@ -41,7 +41,7 @@ public class MealsService {
 
 		meal.setName(meals.getName());
 		meal.setDescription(meals.getDescription());
-		meal.setPicture(meals.getPicture());
+		meal.setPicture(meals.getPostedBy().getPartnerId()+"-"+meals.getPicture().replaceAll("[^a-zA-Z0-9.-]", ""));
 		meal.setStock(meals.getStock());
 		meal.setPostedBy(meals.getPostedBy());
 
@@ -53,6 +53,9 @@ public class MealsService {
 
 	public List<Meals> getMeals() {
 		return mealsRepository.findAll();
+	}
+	public List<Meals> getMeals(boolean condition) {
+		return mealsRepository.findByApproved(condition);
 	}
 
 	

@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,10 +64,10 @@ public class BaseController {
 		return "index endpoint";
 	}
 
-	@GetMapping(value = "/get-image")
-	public ResponseEntity<Resource> getImage(@RequestBody GlobalRequest request) throws IOException {
-		String path = "target/classes/static/images/"+request.get("type");
-		Path imageFilePath = Paths.get(path).resolve(request.get("imageName"));
+	@GetMapping(value = "/get-image/{type}/{imageName}")
+	public ResponseEntity<Resource> getImage(@PathVariable String type, @PathVariable String imageName) throws IOException {
+		String path = "target/classes/static/images/"+type;
+		Path imageFilePath = Paths.get(path).resolve(imageName);
 		Resource imageResource = new FileSystemResource(imageFilePath.toFile());
 		if (imageResource.exists() && imageResource.isReadable()) {
 			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageResource);
@@ -148,7 +150,8 @@ public class BaseController {
 	@PostMapping("/upload-image/{type}")
 	public ResponseEntity<?> uploadPicture(@RequestParam("file") MultipartFile file,@PathVariable(name="type")String type,@RequestParam("userID")Long userID) throws IOException {
 		// uploading image to static directory
-		String filename = String.format("%s - %s", userID, file.getOriginalFilename());
+		String originalFilename = file.getOriginalFilename();
+		String sanitizedFilename = userID + "-" + originalFilename.replaceAll("[^a-zA-Z0-9.-]", "");
 		String path = "target/classes/static/images/" + type;
 		Path dir = Paths.get(path);
 
@@ -165,7 +168,7 @@ public class BaseController {
 		// save image to directory
 		try {
 			InputStream inputStream = file.getInputStream();
-			Path filePath = dir.resolve(filename);
+			Path filePath = dir.resolve(sanitizedFilename);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException exception) {
 			log.error(exception.getMessage());

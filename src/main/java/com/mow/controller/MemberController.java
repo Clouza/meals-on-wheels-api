@@ -49,9 +49,9 @@ public class MemberController {
 		orderHistoriesService.save(orderHistories);
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Order"));
 	}
-	@GetMapping("/meals")
-	public List<Meals> getMeals(){
-		return mealService.getMeals();
+	@GetMapping("/meals/{boolean}")
+	public List<Meals> getMeals(@PathVariable(name = "boolean") boolean isApproved){
+		return mealService.getMeals(isApproved);
 	}
 	@PutMapping("rate-service")
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){
