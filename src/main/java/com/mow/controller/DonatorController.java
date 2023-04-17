@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/donator")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "false")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class DonatorController {
 
 	@Autowired
@@ -41,38 +41,37 @@ public class DonatorController {
 	}
 
 	@PostMapping("/donate")
-	public void postDonate(@RequestBody DonateRequest donate, HttpServletResponse response, Donators donators) {
+	public ResponseEntity<?> postDonate(@RequestBody DonateRequest donate, HttpServletResponse response, Donators donators) {
 
 		try {
 			Payment payment = payPalService.payment(
 					donate.getTotal(),
 					PayPal.AUTHORIZE.name(),
-					donate.getMessage(),
+					donate.getComment(),
 					BASE_URL + "/oops",
 					BASE_URL + "/thankyou");
 
-
 			donators.setName(donate.getName());
 			donators.setEmail(donate.getEmail());
-			donators.setMessage(donate.getMessage());
+			donators.setMessage(donate.getComment());
 			donators.setTotalDonate(donate.getTotal());
 			donatorsService.save(donators);
 			
-			response.sendRedirect(payment.getLinks().get(1).getHref());
-		} catch (PayPalRESTException | IOException exception) {
-			log.error(exception.getMessage());
-		}
-	}
-
-	@GetMapping("/thankyou")
-	public ResponseEntity<?> thankyou(@RequestParam String paymentId, @RequestParam String PayerID) {
-		try {
-			Payment payment = payPalService.pay(paymentId, PayerID);
-			return ResponseEntity.ok(JSON.stringify("Thank you for donation"));
+			return ResponseEntity.ok().body(JSON.stringify(payment.getLinks().get(1).getHref()));
 		} catch (PayPalRESTException exception) {
 			log.error(exception.getMessage());
 		}
-		return new ResponseEntity<>(JSON.stringify("Something went wrong"), HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<>(JSON.stringify("Something went wrong"), HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/thankyou")
+	public void thankyou(@RequestParam String paymentId, @RequestParam String PayerID, HttpServletResponse response) {
+		try {
+			Payment payment = payPalService.pay(paymentId, PayerID);
+			response.sendRedirect("http://localhost:3000/donateTy");
+		} catch (PayPalRESTException | IOException exception) {
+			log.error(exception.getMessage());
+		}
 	}
 
 	@GetMapping("/oops")
