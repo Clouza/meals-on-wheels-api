@@ -150,6 +150,7 @@ public class BaseController {
 	@PostMapping("/upload-image/{type}")
 	public ResponseEntity<?> uploadPicture(@RequestParam("file") MultipartFile file,@PathVariable(name="type")String type,@RequestParam("userID")Long userID) throws IOException {
 		// uploading image to static directory
+		//	remove all space in the name of the file
 		String originalFilename = file.getOriginalFilename();
 		String sanitizedFilename = userID + "-" + originalFilename.replaceAll("[^a-zA-Z0-9.-]", "");
 		String path = "target/classes/static/images/" + type;
@@ -212,6 +213,7 @@ public class BaseController {
 		}
 
 		// uploading image to static directory
+		//	remove all space in the name of the file
 		String filename = user.getUserId() + "-" + file.getOriginalFilename().replaceAll("[^a-zA-Z0-9.-]", "");
 
 		String path = "target/classes/static/images/" + type;

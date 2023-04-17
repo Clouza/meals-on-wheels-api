@@ -41,6 +41,7 @@ public class MealsService {
 
 		meal.setName(meals.getName());
 		meal.setDescription(meals.getDescription());
+		//	remove all space in the name of the file
 		meal.setPicture(meals.getPostedBy().getPartnerId()+"-"+meals.getPicture().replaceAll("[^a-zA-Z0-9.-]", ""));
 		meal.setStock(meals.getStock());
 		meal.setPostedBy(meals.getPostedBy());
