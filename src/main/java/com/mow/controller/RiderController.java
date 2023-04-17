@@ -31,10 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class RiderController {
 	@Autowired
 	RidersService riderService;
+
 	@Autowired
 	OrderHistoriesService orderHistoriesService;
+
 	@Autowired
 	UsersService usersService;
+
 	@Autowired
 	JSONResponse JSON;
 	
@@ -43,12 +46,12 @@ public class RiderController {
 		return "rider endpoint";
 	}
 
-	@GetMapping("get-order/{status}")
+	@GetMapping("/order/{status}")
 	public List<OrderHistories> getOrderHistory(@PathVariable("status") String status){
-		return  orderHistoriesService.getOrderHistories(status);
+		return orderHistoriesService.getOrderHistories(status);
 	}
 
-	@PutMapping("handle-order")
+	@PutMapping("/handle-order")
 	public ResponseEntity<?> handleOrder(@RequestBody OrderHistories orderHistories){
 		orderHistoriesService.save(orderHistories);
 		return ResponseEntity.ok().body(JSON.stringify("Account created!"));

@@ -52,6 +52,7 @@ public class PartnerController {
 	public Optional<Partners> getPartner(@PathVariable String username){
 		Users user = usersService.findByUsername(username);
 		return partnerService.getPartner(user);
+
 	}
 	
 	@PostMapping("/meals")
