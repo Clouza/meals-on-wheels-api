@@ -11,7 +11,7 @@ public class DonateRequest {
 
     private String name;
     private String email;
-    private String message;
+    private String comment;
     private double total;
 
 }
