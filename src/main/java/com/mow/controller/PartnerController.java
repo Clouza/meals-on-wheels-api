@@ -47,7 +47,7 @@ public class PartnerController {
 		return partnerService.getPartners();
 	}
 
-	@GetMapping("/get-partner/{id}")
+	@GetMapping("/partner/{id}")
 	public Optional<Partners> getPartner(@PathVariable Long id){
 		return partnerService.getPartner(id);
 	}
