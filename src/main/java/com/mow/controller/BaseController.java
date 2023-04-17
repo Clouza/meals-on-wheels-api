@@ -212,7 +212,8 @@ public class BaseController {
 		}
 
 		// uploading image to static directory
-		String filename = String.format("%s - %s", user.getUserId(), file.getOriginalFilename());
+		String filename = user.getUserId() + "-" + file.getOriginalFilename().replaceAll("[^a-zA-Z0-9.-]", "");
+
 		String path = "target/classes/static/images/" + type;
 		Path dir = Paths.get(path);
 

@@ -54,9 +54,33 @@ public class MealsService {
 	public List<Meals> getMeals() {
 		return mealsRepository.findAll();
 	}
+
 	public List<Meals> getMeals(boolean condition) {
 		return mealsRepository.findByApproved(condition);
 	}
 
-	
+	public Meals getMeal(Long id) {
+		return mealsRepository.findById(id).get();
+	}
+
+	public void updateMeal(Meals meal) {
+		Meals currentMeal = this.getMeal(meal.getMealId());
+		currentMeal.setName(meal.getName());
+		currentMeal.setDescription(meal.getDescription());
+		currentMeal.setStock(meal.getStock());
+		currentMeal.setPicture(meal.getPicture());
+		currentMeal.setUpdatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
+
+		mealsRepository.save(currentMeal);
+	}
+
+	public boolean delete(Long id) {
+		boolean isMealExists = mealsRepository.existsById(id);
+		if(isMealExists) {
+			mealsRepository.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.mow.controller;
 
+import com.mow.utils.JSONBuilder;
 import com.mysql.cj.protocol.Resultset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -37,23 +38,21 @@ public class MemberControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "user", password = "user", roles = {"MEMBER"})
+    @WithMockUser(roles = "MEMBER")
     void getMembers() throws Exception {
         mvc.perform(get("/api/v1/member/members")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "user", password = "user", roles = {"MEMBER"})
-    void getImageWithoutParam() throws Exception {
-        mvc.perform(get("/api/v1/member/get-image")).andExpect(status().isBadRequest());
+    @WithMockUser(roles = "MEMBER")
+    void orderMealsBadRequest() throws Exception {
+        mvc.perform(post("/api/v1/member/order-meals")).andExpect(status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(username = "user", password = "user", roles = {"MEMBER"})
-    void getImageWithParam() throws Exception {
-        mvc.perform(get("/api/v1/member/get-image")
-                .content("test.img")
-        ).andExpect(status().isNotFound());
+    @WithMockUser(roles = "MEMBER")
+    void rateServiceBadRequest() throws Exception {
+        mvc.perform(put("/api/v1/member/rate-service")).andExpect(status().isBadRequest());
     }
 
 }

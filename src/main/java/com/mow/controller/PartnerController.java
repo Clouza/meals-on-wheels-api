@@ -24,6 +24,7 @@ public class PartnerController {
 
 	@Autowired
 	UsersService usersService;
+
 	@Autowired
 	PartnersService partnerService;
 	
@@ -48,11 +49,10 @@ public class PartnerController {
 		return partnerService.getPartners();
 	}
 
-	@GetMapping("/get-partner/{username}")
+	@GetMapping("/{username}")
 	public Optional<Partners> getPartner(@PathVariable String username){
 		Users user = usersService.findByUsername(username);
 		return partnerService.getPartner(user);
-
 	}
 	
 	@PostMapping("/meals")
@@ -60,5 +60,21 @@ public class PartnerController {
 		mealsService.save(mealsRequest);
 		return new ResponseEntity<>(JSON.stringify("Meal has been saved"), HttpStatus.CREATED);
 	}
+
+	@PutMapping("/meals")
+	public ResponseEntity<?> putMeals(@RequestBody Meals meals) {
+		mealsService.updateMeal(meals);
+		return ResponseEntity.ok().body(JSON.stringify("Meal updated"));
+	}
+
+	@DeleteMapping("/meals/{id}")
+	public ResponseEntity<?> deleteMeals(@PathVariable Long id) {
+		if(mealsService.delete(id)) {
+			return ResponseEntity.ok().body(JSON.stringify("Meal Deleted"));
+		}
+
+		return new ResponseEntity<>(JSON.stringify("Meal not found"), HttpStatus.NOT_FOUND);
+	}
+
 
 }

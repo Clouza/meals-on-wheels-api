@@ -11,6 +11,7 @@ import com.mow.service.OrderHistoriesService;
 import com.mow.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +25,12 @@ public class MemberController {
 	
 	@Autowired
 	UsersService usersService;
+
 	@Autowired
 	MealsService mealService;
 	@Autowired
 	OrderHistoriesService orderHistoriesService;
+
 	@Autowired
 	MembersService membersService;
 	
@@ -44,19 +47,31 @@ public class MemberController {
 		return membersService.getRecords();
 	}
 
-	@GetMapping("/order-meals")
+	@PostMapping("/order-meals")
 	public ResponseEntity<?> orderMeals(@RequestBody OrderHistories orderHistories){
 		orderHistoriesService.save(orderHistories);
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Order"));
 	}
+
 	@GetMapping("/meals/{boolean}")
 	public List<Meals> getMeals(@PathVariable(name = "boolean") boolean isApproved){
 		return mealService.getMeals(isApproved);
 	}
-	@PutMapping("rate-service")
+
+
+	@PutMapping("/rate-service")
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){
 		membersService.addRatingToRiderAndMeals(rating.getRiders(), rating.getRidersRating(), rating.getMeals(), rating.getMealsRating());
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Giving rating to Rider and Meals"));
+	}
+
+	@DeleteMapping("/history/{id}")
+	public ResponseEntity<?> deleteHistory(@PathVariable Long id) {
+		if(membersService.delete(id)) {
+			return ResponseEntity.ok().body(JSON.stringify("Order history deleted"));
+		}
+
+		return new ResponseEntity<>(JSON.stringify("Order history not found"), HttpStatus.NOT_FOUND);
 	}
 
 }
