@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import com.mow.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class PartnersService {
 	public List<Partners> getPartners(){
 		return partnersRepository.findAll();
 	}
-	public Optional<Partners> getPartner(Long id){return partnersRepository.findById(id);}
+	public Optional<Partners> getPartner(Users users){return partnersRepository.findByUser(users);}
 
 	public List<Partners> getPartners(boolean condition) {
 		return partnersRepository.findByApproved(condition);

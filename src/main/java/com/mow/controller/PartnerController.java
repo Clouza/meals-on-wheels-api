@@ -3,6 +3,7 @@ package com.mow.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.mow.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +49,10 @@ public class PartnerController {
 		return partnerService.getPartners();
 	}
 
-	@GetMapping("/{id}")
-	public Optional<Partners> getPartner(@PathVariable Long id){
-		return partnerService.getPartner(id);
+	@GetMapping("/{username}")
+	public Optional<Partners> getPartner(@PathVariable String username){
+		Users user = usersService.findByUsername(username);
+		return partnerService.getPartner(user);
 	}
 	
 	@PostMapping("/meals")
