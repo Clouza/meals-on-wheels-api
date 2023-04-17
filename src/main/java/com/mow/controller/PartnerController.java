@@ -76,5 +76,4 @@ public class PartnerController {
 		return new ResponseEntity<>(JSON.stringify("Meal not found"), HttpStatus.NOT_FOUND);
 	}
 
-
 }

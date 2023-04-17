@@ -50,7 +50,8 @@ public class MembersService {
 		// Add rating to Rider entity
 		double currentRiderRating = rider.getRating();
 		int riderTotalRatings = rider.getTotalRatings();
-//		count the rating
+
+		// count the rating
 		double newRiderRating = (currentRiderRating * riderTotalRatings + riderRating) / (riderTotalRatings + 1);
 		rider.setRating(newRiderRating);
 		rider.setTotalRatings(riderTotalRatings + 1);
@@ -59,7 +60,8 @@ public class MembersService {
 		// Add rating to Meals entity
 		double currentMealsRating = meals.getRating();
 		int mealsTotalRatings = meals.getTotalRatings();
-//		count the rating
+
+		// count the rating
 		double newMealsRating = (currentMealsRating * mealsTotalRatings + mealsRating) / (mealsTotalRatings + 1);
 		meals.setRating(newMealsRating);
 		meals.setTotalRatings(mealsTotalRatings + 1);
