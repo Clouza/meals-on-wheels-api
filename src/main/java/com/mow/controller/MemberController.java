@@ -58,7 +58,6 @@ public class MemberController {
 		return mealService.getMeals(isApproved);
 	}
 
-
 	@PutMapping("/rate-service")
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){
 		membersService.addRatingToRiderAndMeals(rating.getRiders(), rating.getRidersRating(), rating.getMeals(), rating.getMealsRating());

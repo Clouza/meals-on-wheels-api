@@ -18,8 +18,10 @@ public class AdminsService {
 	
 	@Autowired
 	MembersRepository membersRepository;
+
 	@Autowired
 	MealsRepository mealsRepository;
+
 	@Autowired
 	PartnersRepository partnerRepository;
 	
@@ -98,4 +100,5 @@ public class AdminsService {
 	public Donators getDonatorById(Long id) {
 		return donatorsRepository.findById(id).get();
 	}
+
 }

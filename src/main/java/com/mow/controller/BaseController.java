@@ -148,7 +148,11 @@ public class BaseController {
 		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
 	}
 	@PostMapping("/upload-image/{type}")
-	public ResponseEntity<?> uploadPicture(@RequestParam("file") MultipartFile file,@PathVariable(name="type")String type,@RequestParam("userID")Long userID) throws IOException {
+	public ResponseEntity<?> uploadPicture(
+			@PathVariable(name="type") String type,
+			@RequestParam("file") MultipartFile file,
+			@RequestParam("userID") Long userID) throws IOException {
+
 		// uploading image to static directory
 		//	remove all space in the name of the file
 		String originalFilename = file.getOriginalFilename();
@@ -176,6 +180,7 @@ public class BaseController {
 		}
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
+
 	@PostMapping("/upload/{type}")
 	public ResponseEntity<?> registerMember(
 			@PathVariable(name = "type") String type,
