@@ -23,6 +23,7 @@ public class PartnerController {
 
 	@Autowired
 	UsersService usersService;
+
 	@Autowired
 	PartnersService partnerService;
 	
@@ -47,7 +48,7 @@ public class PartnerController {
 		return partnerService.getPartners();
 	}
 
-	@GetMapping("/partner/{id}")
+	@GetMapping("/{id}")
 	public Optional<Partners> getPartner(@PathVariable Long id){
 		return partnerService.getPartner(id);
 	}

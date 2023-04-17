@@ -22,8 +22,10 @@ public class MemberController {
 	
 	@Autowired
 	UsersService usersService;
+
 	@Autowired
 	OrderHistoriesService orderHistoriesService;
+
 	@Autowired
 	MembersService membersService;
 	
@@ -40,13 +42,13 @@ public class MemberController {
 		return membersService.getRecords();
 	}
 
-	@GetMapping("/order-meals")
+	@PostMapping("/order-meals")
 	public ResponseEntity<?> orderMeals(@RequestBody OrderHistories orderHistories){
 		orderHistoriesService.save(orderHistories);
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Order"));
 	}
 
-	@PutMapping("rate-service")
+	@PutMapping("/rate-service")
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){
 		membersService.addRatingToRiderAndMeals(rating.getRiders(), rating.getRidersRating(), rating.getMeals(), rating.getMealsRating());
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Giving rating to Rider and Meals"));

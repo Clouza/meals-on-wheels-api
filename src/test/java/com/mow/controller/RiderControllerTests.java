@@ -1,5 +1,6 @@
 package com.mow.controller;
 
+import lombok.With;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class PartnerControllerTests {
+public class RiderControllerTests {
 
     @Autowired
     private WebApplicationContext context;
@@ -33,27 +34,15 @@ public class PartnerControllerTests {
     }
 
     @Test
-    @WithMockUser(roles = "PARTNER")
-    void getMeals() throws Exception {
-        mvc.perform(get("/api/v1/partner/meals")).andExpect(status().isOk());
+    @WithMockUser(roles = {"RIDER"})
+    void getOrderHistory() throws Exception {
+        mvc.perform(get("/api/v1/rider/status/pending"));
     }
 
     @Test
-    @WithMockUser(roles = "PARTNER")
-    void getPartners() throws Exception {
-        mvc.perform(get("/api/v1/partner/partners")).andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = "PARTNER")
-    void getPartner() throws Exception {
-        mvc.perform(get("/api/v1/partner/" + 1L)).andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = "PARTNER")
-    void postMealsWithoutParams() throws Exception {
-        mvc.perform(post("/api/v1/partner/meals")).andExpect(status().isBadRequest());
+    @WithMockUser(roles = {"RIDER"})
+    void handleOrder() throws Exception {
+        mvc.perform(put("/api/v1/rider/handle-order"));
     }
 
 }
