@@ -1,9 +1,11 @@
 package com.mow.controller;
 
+import com.mow.entity.Meals;
 import com.mow.entity.Members;
 import com.mow.entity.OrderHistories;
 import com.mow.request.Rating;
 import com.mow.response.JSONResponse;
+import com.mow.service.MealsService;
 import com.mow.service.MembersService;
 import com.mow.service.OrderHistoriesService;
 import com.mow.service.UsersService;
@@ -22,6 +24,8 @@ public class MemberController {
 	
 	@Autowired
 	UsersService usersService;
+	@Autowired
+	MealsService mealService;
 	@Autowired
 	OrderHistoriesService orderHistoriesService;
 	@Autowired
@@ -45,7 +49,10 @@ public class MemberController {
 		orderHistoriesService.save(orderHistories);
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Order"));
 	}
-
+	@GetMapping("/meals")
+	public List<Meals> getMeals(){
+		return mealService.getMeals();
+	}
 	@PutMapping("rate-service")
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){
 		membersService.addRatingToRiderAndMeals(rating.getRiders(), rating.getRidersRating(), rating.getMeals(), rating.getMealsRating());

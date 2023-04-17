@@ -48,6 +48,7 @@ public class Meals {
     @JoinColumn(name = "category_id")
     Categories category;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "partner_id")
 	Partners postedBy;

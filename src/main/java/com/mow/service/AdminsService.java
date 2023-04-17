@@ -2,19 +2,10 @@ package com.mow.service;
 
 import java.util.List;
 
+import com.mow.entity.*;
+import com.mow.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.mow.entity.Admins;
-import com.mow.entity.Donators;
-import com.mow.entity.Members;
-import com.mow.entity.Partners;
-import com.mow.entity.Riders;
-import com.mow.repository.AdminsRepository;
-import com.mow.repository.DonatorsRepository;
-import com.mow.repository.MembersRepository;
-import com.mow.repository.PartnersRepository;
-import com.mow.repository.RidersRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -27,7 +18,8 @@ public class AdminsService {
 	
 	@Autowired
 	MembersRepository membersRepository;
-	
+	@Autowired
+	MealsRepository mealsRepository;
 	@Autowired
 	PartnersRepository partnerRepository;
 	
@@ -58,6 +50,12 @@ public class AdminsService {
 			Partners partners= partnerRepository.findById(id).get();
 			partners.setApproved(true);
 			partnerRepository.save(partners);
+		}
+
+		if(type.equalsIgnoreCase("meals")){
+			Meals meals = mealsRepository.findById(id).get();
+			meals.setApproved(true);
+			mealsRepository.save(meals);
 		}
 	}
 	

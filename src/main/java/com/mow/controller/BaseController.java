@@ -64,10 +64,9 @@ public class BaseController {
 
 	@GetMapping(value = "/get-image")
 	public ResponseEntity<Resource> getImage(@RequestBody GlobalRequest request) throws IOException {
-		String path = "target/classes/static/images/member";
+		String path = "target/classes/static/images/"+request.get("type");
 		Path imageFilePath = Paths.get(path).resolve(request.get("imageName"));
 		Resource imageResource = new FileSystemResource(imageFilePath.toFile());
-
 		if (imageResource.exists() && imageResource.isReadable()) {
 			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageResource);
 		}
@@ -146,7 +145,33 @@ public class BaseController {
 		}
 		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
 	}
+	@PostMapping("/upload-image/{type}")
+	public ResponseEntity<?> uploadPicture(@RequestParam("file") MultipartFile file,@PathVariable(name="type")String type,@RequestParam("userID")Long userID) throws IOException {
+		// uploading image to static directory
+		String filename = String.format("%s - %s", userID, file.getOriginalFilename());
+		String path = "target/classes/static/images/" + type;
+		Path dir = Paths.get(path);
 
+		// check directory
+		if(!Files.exists(dir)) {
+			Files.createDirectories(dir);
+		}
+
+		// check image size
+		if(file.getSize() > 2000000) { // 2MB
+			return new ResponseEntity<>(JSON.stringify("Image size should be less than 2MB"), HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		// save image to directory
+		try {
+			InputStream inputStream = file.getInputStream();
+			Path filePath = dir.resolve(filename);
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException exception) {
+			log.error(exception.getMessage());
+		}
+		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
+	}
 	@PostMapping("/upload/{type}")
 	public ResponseEntity<?> registerMember(
 			@PathVariable(name = "type") String type,
@@ -238,5 +263,4 @@ public class BaseController {
 		userDetailsService.updateProfile(profile);
 		return ResponseEntity.accepted().body(JSON.stringify("Profile updated"));
 	}
-
 }

@@ -60,9 +60,9 @@ public class AdminController {
 		return riderService.getRiders(isApproved);
 	}
 
-	@GetMapping("/meals/{boolean}")
-	public List<Meals> getMeals(@PathVariable(name = "boolean") boolean isApproved){
-		return mealService.getMeals(isApproved);
+	@GetMapping("/meals")
+	public List<Meals> getMeals(){
+		return mealService.getMeals();
 	}
 
 	@GetMapping("/donators")
