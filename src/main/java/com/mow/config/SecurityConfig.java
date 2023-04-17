@@ -43,7 +43,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/v1/member/**").hasRole("MEMBER")
 				.requestMatchers("/api/v1/partner/**").hasRole("PARTNER")
 				.requestMatchers("/api/v1/rider/**").hasRole("RIDER")
-				.requestMatchers("/api/v1/donator/**").hasRole("DONATOR")
+//				.requestMatchers("/api/v1/donator/**").hasRole("DONATOR")
 			.anyRequest().permitAll();
 
 		// handle credentials exception

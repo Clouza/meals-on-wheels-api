@@ -8,6 +8,8 @@ import com.mow.repository.DonatorsRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -18,6 +20,7 @@ public class DonatorsService {
 	DonatorsRepository donatorsRepository;
 	
 	public void save(Donators donator) {
+		donator.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		donatorsRepository.save(donator);
 	}
 

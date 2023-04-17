@@ -39,3 +39,8 @@ webhook:
     url: https://discord.com/api/webhooks/
     clientId: yourClientId
     token: secret-token
+
+paypal:
+  mode: paypalMode
+  clientId: yourClientId
+  clientSecret: yourSecretId
