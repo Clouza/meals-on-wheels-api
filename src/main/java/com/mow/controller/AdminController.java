@@ -49,7 +49,11 @@ public class AdminController {
 	public List<Partners> getPartners(@PathVariable(name = "boolean") boolean isApproved){
 		return partnerService.getPartners(isApproved);
 	}
-
+	@GetMapping("/partner/{id}")
+	public Partners getPartner(@PathVariable("id")Long id){
+		Meals meals = mealService.getMeal(id);
+		return meals.getPostedBy();
+	}
 	@GetMapping("/members/{boolean}")
 	public List<Members> getMembers(@PathVariable(name = "boolean") boolean isApproved){
 		return memberService.getMembers(isApproved);
@@ -83,5 +87,20 @@ public class AdminController {
 		}
 		return new ResponseEntity<>(JSON.stringify("User not found"), HttpStatus.NOT_FOUND);
 	}
+	@PutMapping("/meals")
+	public ResponseEntity<?> putMeals(@RequestBody Meals meals) {
+		mealService.updateMeal(meals);
+		return ResponseEntity.ok().body(JSON.stringify("Meal updated"));
+	}
+
+	@DeleteMapping("/meals/{id}")
+	public ResponseEntity<?> deleteMeals(@PathVariable Long id) {
+		if(mealService.delete(id)) {
+			return ResponseEntity.ok().body(JSON.stringify("Meal Deleted"));
+		}
+
+		return new ResponseEntity<>(JSON.stringify("Meal not found"), HttpStatus.NOT_FOUND);
+	}
+
 
 }
