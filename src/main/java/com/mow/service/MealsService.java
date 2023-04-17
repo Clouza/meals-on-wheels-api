@@ -73,4 +73,14 @@ public class MealsService {
 
 		mealsRepository.save(currentMeal);
 	}
+
+	public boolean delete(Long id) {
+		boolean isMealExists = mealsRepository.existsById(id);
+		if(isMealExists) {
+			mealsRepository.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
 }

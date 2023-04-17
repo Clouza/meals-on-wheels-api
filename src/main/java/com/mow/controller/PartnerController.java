@@ -67,4 +67,14 @@ public class PartnerController {
 		return ResponseEntity.ok().body(JSON.stringify("Meal updated"));
 	}
 
+	@DeleteMapping("/meals/{id}")
+	public ResponseEntity<?> deleteMeals(@PathVariable Long id) {
+		if(mealsService.delete(id)) {
+			return ResponseEntity.ok().body(JSON.stringify("Meal Deleted"));
+		}
+
+		return new ResponseEntity<>(JSON.stringify("Meal not found"), HttpStatus.NOT_FOUND);
+	}
+
+
 }

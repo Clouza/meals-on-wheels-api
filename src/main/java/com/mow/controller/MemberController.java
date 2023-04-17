@@ -9,6 +9,7 @@ import com.mow.service.OrderHistoriesService;
 import com.mow.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +53,15 @@ public class MemberController {
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){
 		membersService.addRatingToRiderAndMeals(rating.getRiders(), rating.getRidersRating(), rating.getMeals(), rating.getMealsRating());
 		return ResponseEntity.ok().body(JSON.stringify("Successfully Giving rating to Rider and Meals"));
+	}
+
+	@DeleteMapping("/history/{id}")
+	public ResponseEntity<?> deleteHistory(@PathVariable Long id) {
+		if(membersService.delete(id)) {
+			return ResponseEntity.ok().body(JSON.stringify("Order history deleted"));
+		}
+
+		return new ResponseEntity<>(JSON.stringify("Order history not found"), HttpStatus.NOT_FOUND);
 	}
 
 }

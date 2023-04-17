@@ -7,6 +7,7 @@ import java.util.List;
 import com.mow.entity.Meals;
 import com.mow.entity.Riders;
 import com.mow.repository.MealsRepository;
+import com.mow.repository.OrderHistoriesRepository;
 import com.mow.repository.RidersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class MembersService {
 
 	@Autowired
 	MembersRepository membersRepository;
+
+	@Autowired
+	OrderHistoriesRepository orderHistoriesRepository;
+
 	@Autowired
 	RidersRepository ridersRepository;
 
@@ -58,4 +63,13 @@ public class MembersService {
 		meals.setTotalRatings(mealsTotalRatings + 1);
 		mealRepository.save(meals);
 	}
+
+    public boolean delete(Long id) {
+		boolean isHistoryExists = orderHistoriesRepository.existsById(id);
+		if(isHistoryExists) {
+			orderHistoriesRepository.deleteById(id);
+			return true;
+		}
+		return false;
+    }
 }
