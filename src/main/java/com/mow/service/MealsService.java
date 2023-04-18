@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.mow.entity.Partners;
+import com.mow.search.MealsSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +93,10 @@ public class MealsService {
 			return null;
 		}
 		return meals.getPostedBy();
+	}
+
+	public List<Meals> findAll(MealsSpecification mealsSpecification) {
+		return mealsRepository.findAll(mealsSpecification);
 	}
 
 }

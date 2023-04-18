@@ -3,8 +3,11 @@ package com.mow.controller;
 import com.mow.entity.Meals;
 import com.mow.entity.Members;
 import com.mow.entity.OrderHistories;
+import com.mow.request.GlobalRequest;
 import com.mow.request.Rating;
 import com.mow.response.JSONResponse;
+import com.mow.search.MealsSpecification;
+import com.mow.search.SearchCriteria;
 import com.mow.service.MealsService;
 import com.mow.service.MembersService;
 import com.mow.service.OrderHistoriesService;
@@ -54,12 +57,18 @@ public class MemberController {
 	}
 
 	@GetMapping("/meals/{boolean}")
-	public List<Meals> getMeals(@PathVariable(name = "boolean") boolean isApproved){
+	public List<Meals> getMealWithBoolean(@PathVariable(name = "boolean") boolean isApproved){
 		return mealService.getMeals(isApproved);
 	}
 	@GetMapping("/order/{status}")
 	public List<OrderHistories> getOrder(@PathVariable String status){
 		return orderHistoriesService.getOrderHistories(status);
+	}
+
+	@PostMapping("/meals")
+	public List<Meals> getMeals(@RequestBody GlobalRequest request) {
+		MealsSpecification mealsSpecification = new MealsSpecification(new SearchCriteria("name", "%", request.get("food")));
+		return mealService.findAll(mealsSpecification);
 	}
 
 	@PutMapping("/rate-service")
