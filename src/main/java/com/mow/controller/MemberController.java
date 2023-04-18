@@ -60,6 +60,10 @@ public class MemberController {
 	public List<Meals> getMealWithBoolean(@PathVariable(name = "boolean") boolean isApproved){
 		return mealService.getMeals(isApproved);
 	}
+	@GetMapping("/order/{status}")
+	public List<OrderHistories> getOrder(@PathVariable String status){
+		return orderHistoriesService.getOrderHistories(status);
+	}
 
 	@PostMapping("/meals")
 	public List<Meals> getMeals(@RequestBody GlobalRequest request) {

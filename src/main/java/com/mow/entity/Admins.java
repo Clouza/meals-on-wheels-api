@@ -1,5 +1,6 @@
 package com.mow.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class Admins {
 	
 	@Column(name = "created_at", nullable = false)
 	String createdAt;
-	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;

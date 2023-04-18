@@ -53,19 +53,19 @@ public class Users {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	UserDetails userDetails;
 
-	@JsonIgnore
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Admins admins;
 
-	@JsonIgnore
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Members members;
 
-	@JsonIgnore
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Partners partners;
 
-	@JsonIgnore
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Riders riders;
 	

@@ -54,6 +54,6 @@ public class RiderController {
 	@PutMapping("/handle-order")
 	public ResponseEntity<?> handleOrder(@RequestBody OrderHistories orderHistories){
 		orderHistoriesService.save(orderHistories);
-		return ResponseEntity.ok().body(JSON.stringify("Account created!"));
+		return ResponseEntity.ok().body(JSON.stringify("status changed"));
 	}
 }
