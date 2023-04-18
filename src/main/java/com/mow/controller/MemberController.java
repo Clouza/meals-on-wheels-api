@@ -57,6 +57,10 @@ public class MemberController {
 	public List<Meals> getMeals(@PathVariable(name = "boolean") boolean isApproved){
 		return mealService.getMeals(isApproved);
 	}
+	@GetMapping("/order/{status}")
+	public List<OrderHistories> getOrder(@PathVariable String status){
+		return orderHistoriesService.getOrderHistories(status);
+	}
 
 	@PutMapping("/rate-service")
 	public ResponseEntity<?> rateService(@RequestBody Rating rating){

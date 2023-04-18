@@ -1,5 +1,6 @@
 package com.mow.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,14 +25,16 @@ public class OrderHistories {
 	String createdAt;
 
 	@OneToOne
-	@JoinColumn(name = "meal_id",nullable = false)
+	@JoinColumn(name = "meal_id")
 	Meals meals;
 
-	@ManyToOne
-	@JoinColumn(name = "member_id",nullable = false)
-	Members member;
 
 	@ManyToOne
+	@JoinColumn(name = "member_id")
+	Members member;
+
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "rider_id")
 	Riders rider;
 }

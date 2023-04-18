@@ -4,8 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.mow.entity.OrderHistories;
+import com.mow.entity.Partners;
+import com.mow.entity.Users;
 import com.mow.repository.OrderHistoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +35,12 @@ public class RidersService {
 		ridersRepository.save(rider);
 	}
 
-    public List<Riders> getRiders(boolean condition) {
-		return ridersRepository.findByApproved(condition);
+    public List<Users> getUsers(boolean condition) {
+		List<Riders> riderList=ridersRepository.findByApproved(condition);
+		List<Users> userList = riderList.stream()
+				.map(Riders::getUser)
+				.collect(Collectors.toList());
+		return userList;
     }
 	public Optional<Riders> getSingleRider(Long id){
 		return ridersRepository.findById(id);

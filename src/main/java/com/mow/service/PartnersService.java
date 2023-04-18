@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.mow.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,11 @@ public class PartnersService {
 	}
 	public Optional<Partners> getPartner(Users users){return partnersRepository.findByUser(users);}
 
-	public List<Partners> getPartners(boolean condition) {
-		return partnersRepository.findByApproved(condition);
+	public List<Users> getUsers(boolean condition) {
+		List<Partners> partnersList = partnersRepository.findByApproved(condition);
+		List<Users> userList = partnersList.stream()
+				.map(Partners::getUser)
+				.collect(Collectors.toList());
+		return userList;
 	}
 }

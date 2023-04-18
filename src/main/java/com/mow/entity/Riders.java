@@ -1,5 +1,6 @@
 package com.mow.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,11 +40,11 @@ public class Riders {
 	
 	@Column(name = "updated_at", nullable = true)
 	String updatedAt;
-	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "rider", cascade = CascadeType.ALL)
 	List<OrderHistories> orderHistories;
 }

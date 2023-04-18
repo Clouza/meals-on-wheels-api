@@ -3,16 +3,15 @@ package com.mow.service;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.mow.entity.Meals;
-import com.mow.entity.Riders;
+import com.mow.entity.*;
 import com.mow.repository.MealsRepository;
 import com.mow.repository.OrderHistoriesRepository;
 import com.mow.repository.RidersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mow.entity.Members;
 import com.mow.repository.MembersRepository;
 
 import jakarta.transaction.Transactional;
@@ -42,8 +41,12 @@ public class MembersService {
 		return membersRepository.findAll();
 	}
 
-    public List<Members> getMembers(boolean condition) {
-		return membersRepository.findByApproved(condition);
+    public List<Users> getUsers(boolean condition) {
+		List<Members> membersList = membersRepository.findByApproved(condition);
+		List<Users> userList = membersList.stream()
+				.map(Members::getUser)
+				.collect(Collectors.toList());
+		return userList;
     }
 
 	public void addRatingToRiderAndMeals(Riders rider, double riderRating, Meals meals, double mealsRating) {

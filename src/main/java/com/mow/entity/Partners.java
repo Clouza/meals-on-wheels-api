@@ -1,5 +1,6 @@
 package com.mow.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class Partners {
 	
 	@Column(name = "created_at", nullable = false)
 	String createdAt;
-
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;

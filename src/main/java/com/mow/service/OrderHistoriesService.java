@@ -20,6 +20,7 @@ public class OrderHistoriesService {
 	OrderHistoriesRepository orderHistoriesRepository;
 	
 	public void save(OrderHistories orderHistory) {
+		orderHistory.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		orderHistoriesRepository.save(orderHistory);
 	}
 	public List<OrderHistories> getOrderHistories(String condition){
