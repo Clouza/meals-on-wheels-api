@@ -25,7 +25,10 @@ public class MembersService {
 
 	@Autowired
 	OrderHistoriesRepository orderHistoriesRepository;
-
+	@Autowired
+	UsersService usersService;
+	@Autowired
+	MealsService mealsService;
 	@Autowired
 	RidersRepository ridersRepository;
 
@@ -58,6 +61,7 @@ public class MembersService {
 		double newRiderRating = (currentRiderRating * riderTotalRatings + riderRating) / (riderTotalRatings + 1);
 		rider.setRating(newRiderRating);
 		rider.setTotalRatings(riderTotalRatings + 1);
+		rider.setUser(usersService.findByRiderId(rider.getRiderId()));
 		ridersRepository.save(rider);
 
 		// Add rating to Meals entity
@@ -68,6 +72,7 @@ public class MembersService {
 		double newMealsRating = (currentMealsRating * mealsTotalRatings + mealsRating) / (mealsTotalRatings + 1);
 		meals.setRating(newMealsRating);
 		meals.setTotalRatings(mealsTotalRatings + 1);
+		meals.setPostedBy(mealsService.findByMealsId(meals.getMealId()));
 		mealRepository.save(meals);
 	}
 

@@ -70,11 +70,9 @@ public class MemberController {
 
 	@DeleteMapping("/history/{id}")
 	public ResponseEntity<?> deleteHistory(@PathVariable Long id) {
-		if(membersService.delete(id)) {
-			return ResponseEntity.ok().body(JSON.stringify("Order history deleted"));
-		}
+		orderHistoriesService.delete(id);
 
-		return new ResponseEntity<>(JSON.stringify("Order history not found"), HttpStatus.NOT_FOUND);
+		return ResponseEntity.ok().body(JSON.stringify("Order history deleted"));
 	}
 
 }

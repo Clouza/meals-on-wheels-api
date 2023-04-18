@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import com.mow.entity.Partners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,6 +83,15 @@ public class MealsService {
 			return true;
 		}
 		return false;
+	}
+
+	public Partners findByMealsId(Long id) {
+		Meals meals = mealsRepository.findById(id).orElse(null);
+		if (meals == null) {
+			// Handle the case where the Meals entity is not found
+			return null;
+		}
+		return meals.getPostedBy();
 	}
 
 }

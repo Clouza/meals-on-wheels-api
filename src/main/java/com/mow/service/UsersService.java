@@ -1,6 +1,8 @@
 package com.mow.service;
 
+import com.mow.entity.Riders;
 import com.mow.enums.Roles;
+import com.mow.repository.RidersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class UsersService {
 
 	@Autowired
 	UsersRepository usersRepository;
+	@Autowired
+	RidersRepository ridersRepository;
 	
 	public void save(Users user) {
 		usersRepository.save(user);
@@ -41,12 +45,23 @@ public class UsersService {
 		}
 		return false;
     }
-
+	public Users findByRiderId(Long id) {
+		Riders rider = ridersRepository.findById(id).orElse(null);
+		if (rider == null) {
+			// Handle the case where the Meals entity is not found
+			return null;
+		}
+		return rider.getUser();
+	}
     public Users getRecordById(Long id) {
 		return usersRepository.findById(id).get();
     }
 
 	public Users getRecordByUsername(String username) {
 		return usersRepository.findByUsername(username);
+	}
+
+	public List<Users> findByRole(Roles rider) {
+		return usersRepository.findByRole(rider);
 	}
 }

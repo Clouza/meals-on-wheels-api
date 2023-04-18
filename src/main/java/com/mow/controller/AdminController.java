@@ -1,6 +1,7 @@
 package com.mow.controller;
 
 import com.mow.entity.*;
+import com.mow.enums.Roles;
 import com.mow.request.ApprovesRequest;
 import com.mow.response.JSONResponse;
 import com.mow.service.*;
@@ -30,7 +31,8 @@ public class AdminController {
 
 	@Autowired
 	DonatorsService donatorService;
-
+	@Autowired
+	OrderHistoriesService orderHistoriesService;
 	@Autowired
 	RidersService riderService;
 
@@ -73,6 +75,28 @@ public class AdminController {
 	public List<Donators> getDonators(){
 		return donatorService.getDonators();
 	}
+
+
+	//	--------------------------------------------------------------------------------------------------------------------------------------------
+	@GetMapping("/order/{status}")
+	public List<OrderHistories> getOrder(@PathVariable String status){
+		return orderHistoriesService.getOrderHistories(status);
+	}
+	@GetMapping("/riders")
+	public List<Users> getRiders(){
+		return usersService.findByRole(Roles.RIDER);
+	}
+	@GetMapping("/user/{username}")
+	public Users getUser(@PathVariable String username){
+		return usersService.findByUsername(username);
+	}
+	@PutMapping("/handle-order")
+	public ResponseEntity<?> handleOrder(@RequestBody OrderHistories orderHistories){
+		orderHistoriesService.save(orderHistories);
+		return ResponseEntity.ok().body(JSON.stringify("status changed"));
+	}
+	//	--------------------------------------------------------------------------------------------------------------------------------------------
+
 
 	@PutMapping("/approve")
 	public ResponseEntity<?> putApprove(@RequestBody ApprovesRequest approveRequest) {

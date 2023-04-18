@@ -37,7 +37,8 @@ public class Riders {
 	
 	@Column(name = "created_at", nullable = false)
 	String createdAt;
-	
+	@Column(name = "status", nullable = false)
+	String status;
 	@Column(name = "updated_at", nullable = true)
 	String updatedAt;
 	@JsonIgnore

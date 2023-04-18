@@ -259,6 +259,7 @@ public class BaseController {
 			rider.setDrivingLicense(filename);
 			rider.setVehicle(text); // vehicle name
 			rider.setUser(user);
+			rider.setStatus("BUSY");
 
 			// save to database
 			usersService.save(user);

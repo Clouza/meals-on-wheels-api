@@ -50,7 +50,11 @@ public class RiderController {
 	public List<OrderHistories> getOrderHistory(@PathVariable("status") String status){
 		return orderHistoriesService.getOrderHistories(status);
 	}
-
+	@PutMapping("/update")
+	public ResponseEntity<?> updateStatus(@RequestBody Riders riders){
+		riderService.save(riders);
+		return ResponseEntity.ok().body(JSON.stringify("status changed"));
+	}
 	@PutMapping("/handle-order")
 	public ResponseEntity<?> handleOrder(@RequestBody OrderHistories orderHistories){
 		orderHistoriesService.save(orderHistories);

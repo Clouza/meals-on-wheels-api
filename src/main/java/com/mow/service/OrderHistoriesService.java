@@ -26,4 +26,9 @@ public class OrderHistoriesService {
 	public List<OrderHistories> getOrderHistories(String condition){
 		return orderHistoriesRepository.findByStatus(condition);
 	}
+
+	public boolean delete(Long id) {
+		 orderHistoriesRepository.deleteById(id);
+		return true;
+	}
 }
