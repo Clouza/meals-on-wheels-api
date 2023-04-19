@@ -57,8 +57,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             user.setProvider(Providers.GOOGLE);
         }
 
-        System.out.println(oauth2User.getProvider());
-
         usersService.save(user);
     }
 

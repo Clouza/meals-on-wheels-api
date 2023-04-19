@@ -56,4 +56,11 @@ public class PartnerControllerTests {
         mvc.perform(post("/api/v1/partner/meals")).andExpect(status().isBadRequest());
     }
 
+    @Test
+    @WithMockUser(roles = "PARTNER")
+    void deleteMeal() throws Exception {
+        mvc.perform(delete("/api/v1/partner/meals/" + 1L))
+                .andExpect(status().isOk());
+    }
+
 }

@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -48,11 +47,46 @@ public class BaseControllerTests {
     }
 
     @Test
+    void updateProfile() throws Exception {
+        mvc.perform(put("/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBuilder
+                                .put("name", "Wahyu Siwananda")
+                                .put("phoneNumber", "123")
+                                .put("age", "99")
+                                .put("picture", "image.jpg")
+                                .put("username", "wahyu")
+                                .stringify()
+                        )
+                )
+                .andExpect(status().isAccepted());
+    }
+
+    @Test
     @WithMockUser(username = "user", password = "user", roles = {"MEMBER"})
     void getImageWithParam() throws Exception {
         mvc.perform(get("/api/v1/member/get-image")
                 .content("test.img")
         ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void registration() throws Exception {
+        mvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.jsonBuilder.stringify())
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    void login() throws Exception {
+        mvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonBuilder
+                        .put("username", "wahyu")
+                        .put("password", "wahyu")
+                        .stringify()))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -72,10 +106,10 @@ public class BaseControllerTests {
     }
 
     @Test
-    void addUserToPartnerByValidUsername() throws Exception { // will get result as expected if record on table partners not exists
+    void addUserToPartnerByValidUsername() throws Exception {
         mvc.perform(post("/register-partner")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonBuilder.put("username", "dummy").stringify())
+                .content(jsonBuilder.put("username", "wahyu").stringify())
         ).andExpect(status().isOk());
     }
 
