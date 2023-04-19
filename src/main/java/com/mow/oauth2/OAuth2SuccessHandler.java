@@ -2,9 +2,9 @@ package com.mow.oauth2;
 
 import com.mow.entity.Users;
 import com.mow.enums.Providers;
+import com.mow.enums.Roles;
 import com.mow.jwt.JWTService;
 import com.mow.service.UsersService;
-import com.mow.utils.Cookies;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,10 +47,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         user.setUsername(oauth2User.getName());
         user.setProviderId(oauth2User.getAttribute("id"));
         user.setEmail(oauth2User.getAttribute("email"));
+        user.setRole(Roles.MEMBER);
 
         if(oauth2User.getProvider().equalsIgnoreCase("Facebook")) {
             user.setProvider(Providers.FACEBOOK);
         }
+
+        if(oauth2User.getProvider().equalsIgnoreCase("Google")) {
+            user.setProvider(Providers.GOOGLE);
+        }
+
+        System.out.println(oauth2User.getProvider());
 
         usersService.save(user);
     }
