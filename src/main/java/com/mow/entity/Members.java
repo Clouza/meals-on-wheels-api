@@ -35,7 +35,5 @@ public class Members {
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;
-	@JsonIgnore
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-	List<OrderHistories> orderHistories;
+
 }

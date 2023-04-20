@@ -31,10 +31,10 @@ public class OrderHistories {
 
 	@ManyToOne
 	@JoinColumn(name = "member_id")
-	Members member;
+	Users member;
 
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "rider_id")
-	Riders rider;
+	Users rider;
 }

@@ -37,15 +37,15 @@ public class Riders {
 	
 	@Column(name = "created_at", nullable = false)
 	String createdAt;
+
 	@Column(name = "status", nullable = false)
 	String status;
+
 	@Column(name = "updated_at", nullable = true)
 	String updatedAt;
 	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	Users user;
-	@JsonIgnore
-	@OneToMany(mappedBy = "rider", cascade = CascadeType.ALL)
-	List<OrderHistories> orderHistories;
+
 }

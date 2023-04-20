@@ -4,19 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mow.enums.Providers;
 import com.mow.enums.Roles;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -68,5 +61,12 @@ public class Users {
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	Riders riders;
-	
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "rider", cascade = CascadeType.ALL)
+	List<OrderHistories> deliverOrder;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<OrderHistories> orderHistories;
 }
