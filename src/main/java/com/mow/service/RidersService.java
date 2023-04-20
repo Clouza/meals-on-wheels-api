@@ -32,7 +32,9 @@ public class RidersService {
 	
 	public void save(Riders rider) {
 		rider.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
-		rider.setUser(usersService.findByRiderId(rider.getRiderId()));
+		if(rider.getRiderId() != null){
+			rider.setUser(usersService.findByRiderId(rider.getRiderId()));
+		}
 		ridersRepository.save(rider);
 	}
 

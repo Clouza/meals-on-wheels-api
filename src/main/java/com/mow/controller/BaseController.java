@@ -216,11 +216,9 @@ public class BaseController {
 		if(user.getMembers() != null && type.equalsIgnoreCase(Roles.MEMBER.name()) || user.getRiders() != null && type.equalsIgnoreCase(Roles.RIDER.name())) {
 			return new ResponseEntity<>(JSON.stringify("You have sent the image"), HttpStatus.NOT_ACCEPTABLE);
 		}
-
 		// uploading image to static directory
 		//	remove all space in the name of the file
 		String filename = user.getUserId() + "-" + file.getOriginalFilename().replaceAll("[^a-zA-Z0-9.-]", "");
-
 		String path = "target/classes/static/images/" + type;
 		Path dir = Paths.get(path);
 
@@ -255,17 +253,16 @@ public class BaseController {
 		}
 
 		if(type.equalsIgnoreCase(Roles.RIDER.name())) {
+
 			user.setRole(Roles.RIDER); // assign role
 			rider.setDrivingLicense(filename);
 			rider.setVehicle(text); // vehicle name
 			rider.setUser(user);
 			rider.setStatus("BUSY");
-
 			// save to database
 			usersService.save(user);
 			riderService.save(rider);
 		}
-
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
 	}
 
