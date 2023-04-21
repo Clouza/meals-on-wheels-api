@@ -51,6 +51,9 @@ public class BaseController {
 	UserDetailsService userDetailsService;
 
 	@Autowired
+	ContactService contactService;
+
+	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -264,6 +267,13 @@ public class BaseController {
 			riderService.save(rider);
 		}
 		return ResponseEntity.ok().body(JSON.stringify("File uploaded successfully"));
+	}
+
+	// contact
+	@PostMapping("/contact")
+	public ResponseEntity<?> postContact(@RequestBody Contact contact) {
+		contactService.save(contact);
+		return ResponseEntity.accepted().body(JSON.stringify("Message has been saved"));
 	}
 
 	// update profile
