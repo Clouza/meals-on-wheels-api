@@ -32,7 +32,7 @@ public class Webhooks {
     }
 
     private void send(String message) {
-        String url = String.format("%s/%s/%s", discordProperties.getUrl(), discordProperties.getClientId(), discordProperties.getToken());
+        String url = String.format("%s/%s/%s", "https://discord.com/api/webhooks/", "1095188870552891474", "3QS3nYOKVT4tYY46d602N56UKf3dZmhUS9dAAPe5gxu_JOBEeJZXI-YhmeQ162VJl7Pb");
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
