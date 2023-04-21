@@ -73,6 +73,7 @@ public class MembersService {
 		meals.setRating(newMealsRating);
 		meals.setTotalRatings(mealsTotalRatings + 1);
 		meals.setPostedBy(mealsService.findByMealsId(meals.getMealId()));
+		meals.setStock(meals.getStock()-1);
 		mealRepository.save(meals);
 	}
 
